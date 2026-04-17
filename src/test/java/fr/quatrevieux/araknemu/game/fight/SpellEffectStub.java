@@ -65,12 +65,12 @@ public class SpellEffectStub implements SpellEffect {
 
     @Override
     public @NonNegative int min() {
-        return min;
+        return 0;
     }
 
     @Override
     public @NonNegative int max() {
-        return max;
+        return 0;
     }
 
     @Override
@@ -80,12 +80,12 @@ public class SpellEffectStub implements SpellEffect {
 
     @Override
     public @GTENegativeOne int duration() {
-        return duration;
+        return 0;
     }
 
     @Override
     public @NonNegative int probability() {
-        return probability;
+        return 0;
     }
 
     @Override

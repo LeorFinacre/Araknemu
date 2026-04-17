@@ -22,8 +22,7 @@ package fr.quatrevieux.araknemu.game.listener.player;
 import fr.quatrevieux.araknemu.core.event.EventsSubscriber;
 import fr.quatrevieux.araknemu.core.event.Listener;
 import fr.quatrevieux.araknemu.game.GameConfiguration;
-import fr.quatrevieux.araknemu.game.exploration.event.SitDownPositionChanged;
-import fr.quatrevieux.araknemu.game.exploration.event.StartExploration;
+import fr.quatrevieux.araknemu.game.exploration.event.EmoteChanged;
 import fr.quatrevieux.araknemu.game.exploration.event.StopExploration;
 import fr.quatrevieux.araknemu.game.player.characteristic.PlayerLife;
 import fr.quatrevieux.araknemu.network.game.out.info.StartLifeTimer;
@@ -42,13 +41,13 @@ public final class LifeRegeneration implements EventsSubscriber {
     @Override
     public Listener[] listeners() {
         return new Listener[] {
-            new Listener<SitDownPositionChanged>() {
+            new Listener<EmoteChanged>() {
                 @Override
-                public void on(SitDownPositionChanged event) {
+                public void on(EmoteChanged event) {
                     final int rate = configuration.baseLifeRegeneration();
 
                     PlayerLife life = event.player().player().properties().life();
-                    if (rate > 0 && event.player().isSitted()) {
+                    if (rate > 0 && (event.emoteId() == 1 && event.player().emoteActivated())) {
                         life.startLifeRegeneration(rate);
                         event.player().send(new StartLifeTimer(rate));
                     } else {
@@ -58,8 +57,8 @@ public final class LifeRegeneration implements EventsSubscriber {
                 }
 
                 @Override
-                public Class<SitDownPositionChanged> event() {
-                    return SitDownPositionChanged.class;
+                public Class<EmoteChanged> event() {
+                    return EmoteChanged.class;
                 }
             },
 

@@ -16,22 +16,34 @@
  *
  * Copyright (c) 2017-2026 Leor Finacre
  */
-package fr.quatrevieux.araknemu.network.game.out.emote;
 
-import fr.quatrevieux.araknemu.core.di.ContainerException;
-import fr.quatrevieux.araknemu.game.GameBaseCase;
+package fr.quatrevieux.araknemu.game.exploration.event;
+
 import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
-import org.junit.jupiter.api.Test;
 
-import java.sql.SQLException;
+/**
+ * Event for sitdown emote
+ */
+public final class EmoteChanged {
+    private final ExplorationPlayer player;
+    private final boolean emoteActivated;
+    private final int emoteId;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+    public int emoteId() {
+        return emoteId;
+    }
 
-public class SitDownEmoteTest extends GameBaseCase {
-    @Test
-    void generate() throws SQLException, ContainerException {
-        ExplorationPlayer exploration = explorationPlayer();
+    public boolean emoteActivated() {
+        return emoteActivated;
+    }
 
-        assertEquals("eUK6|1", new PlayerEmote(exploration, 1, false).toString());
+    public EmoteChanged(ExplorationPlayer player, int emoteId, boolean emoteActivated) {
+        this.player = player;
+        this.emoteActivated = emoteActivated;
+        this.emoteId = emoteId;
+    }
+
+    public ExplorationPlayer player() {
+        return player;
     }
 }

@@ -41,7 +41,7 @@ import fr.quatrevieux.araknemu.network.game.in.dialog.ChosenResponse;
 import fr.quatrevieux.araknemu.network.game.in.dialog.CreateDialogRequest;
 import fr.quatrevieux.araknemu.network.game.in.dialog.LeaveDialogRequest;
 import fr.quatrevieux.araknemu.network.game.in.emote.SetOrientationRequest;
-import fr.quatrevieux.araknemu.network.game.in.emote.SetSitDownRequest;
+import fr.quatrevieux.araknemu.network.game.in.emote.SetEmoteRequest;
 import fr.quatrevieux.araknemu.network.game.in.exchange.AcceptExchangeRequest;
 import fr.quatrevieux.araknemu.network.game.in.exchange.ExchangeReady;
 import fr.quatrevieux.araknemu.network.game.in.exchange.ExchangeRequest;
@@ -139,13 +139,14 @@ public final class GameParserLoader implements ParserLoader {
             new LockTeamRequest.Parser(),
             new NeedHelpRequest.Parser(),
             new ShowCellRequest.Parser(),
-            new SetSitDownRequest.Parser(),
             new FriendListRequest.Parser(),
             new FriendAddRequest.Parser(),
             new FriendRemoveRequest.Parser(),
             new EnemyListRequest.Parser(),
             new EnemyAddRequest.Parser(),
-            new EnemyRemoveRequest.Parser()
+            new EnemyRemoveRequest.Parser(),
+            new ShowCellRequest.Parser(),
+            new SetEmoteRequest.Parser()
         );
     }
 }

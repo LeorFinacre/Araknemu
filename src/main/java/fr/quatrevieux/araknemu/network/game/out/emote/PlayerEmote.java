@@ -18,20 +18,25 @@
  */
 package fr.quatrevieux.araknemu.network.game.out.emote;
 
-import fr.quatrevieux.araknemu.core.di.ContainerException;
-import fr.quatrevieux.araknemu.game.GameBaseCase;
 import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
-import org.junit.jupiter.api.Test;
 
-import java.sql.SQLException;
+public class PlayerEmote {
+    private final ExplorationPlayer player;
+    private boolean emoteActivated;
+    private int emoteId;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+    public int emoteId() {
+        return emoteId;
+    }
 
-public class SitDownEmoteTest extends GameBaseCase {
-    @Test
-    void generate() throws SQLException, ContainerException {
-        ExplorationPlayer exploration = explorationPlayer();
+    public PlayerEmote(ExplorationPlayer player, int emoteId, boolean emoteActivated) {
+        this.player = player;
+        this.emoteActivated = emoteActivated;
+        this.emoteId = emoteId;
+    }
 
-        assertEquals("eUK6|1", new PlayerEmote(exploration, 1, false).toString());
+    @Override
+    public String toString() {
+        return "eUK" + player.id() + "|" + (emoteActivated ? emoteId : "0");
     }
 }

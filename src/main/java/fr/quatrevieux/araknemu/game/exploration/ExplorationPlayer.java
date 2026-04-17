@@ -27,7 +27,13 @@ import fr.quatrevieux.araknemu.game.account.GameAccount;
 import fr.quatrevieux.araknemu.game.exploration.creature.ExplorationCreature;
 import fr.quatrevieux.araknemu.game.exploration.creature.Explorer;
 import fr.quatrevieux.araknemu.game.exploration.creature.Operation;
-import fr.quatrevieux.araknemu.game.exploration.event.*;
+import fr.quatrevieux.araknemu.game.exploration.event.StopExploration;
+import fr.quatrevieux.araknemu.game.exploration.event.EmoteChanged;
+import fr.quatrevieux.araknemu.game.exploration.event.MapJoined;
+import fr.quatrevieux.araknemu.game.exploration.event.MapLeaved;
+import fr.quatrevieux.araknemu.game.exploration.event.MapChanged;
+import fr.quatrevieux.araknemu.game.exploration.event.CellChanged;
+import fr.quatrevieux.araknemu.game.exploration.event.OrientationChanged;
 import fr.quatrevieux.araknemu.game.exploration.interaction.InteractionHandler;
 import fr.quatrevieux.araknemu.game.exploration.interaction.event.PlayerMoveFinished;
 import fr.quatrevieux.araknemu.game.exploration.map.ExplorationMap;
@@ -57,7 +63,7 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
     private @Nullable ExplorationMap map;
     private @Nullable ExplorationMapCell cell;
     private Direction orientation = Direction.SOUTH_EAST;
-    private boolean isSitted;
+    private boolean emoteActivated;
 
     @SuppressWarnings({"assignment", "argument"})
     public ExplorationPlayer(GamePlayer player) {
@@ -144,9 +150,9 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
     }
 
     @Pure
-    public boolean isSitted() { return isSitted; }
+    public boolean emoteActivated() { return emoteActivated; }
 
-    public void setIsSitted(boolean isSitted) { this.isSitted = isSitted; }
+    public void setEmoteActivated(boolean emoteActivated) { this.emoteActivated = emoteActivated; }
     /**
      * @todo Returns {@code Optional<ExplorationMap>}
      */
@@ -167,10 +173,10 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
         player.setPosition(player.position().newCell(cell.id()));
         this.cell = cell;
         this.orientation = orientation;
-        this.isSitted = false;
+        this.emoteActivated = false;
 
         map.dispatch(new PlayerMoveFinished(this, cell));
-        dispatch(new SitDownPositionChanged(this, false));
+        dispatch(new EmoteChanged(this, 0,false));
     }
 
     @Override
@@ -300,14 +306,14 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
     }
 
     /**
-     * Set the player on his knees
+     * Activate or desactivate emote
      */
-    public void setSitDownPosition(boolean isSitted) {
-        this.isSitted = isSitted;
+    public void setCurrentEmote(int emoteId, boolean emoteActivated) {
+        this.emoteActivated = emoteActivated;
 
         if (map != null) {
-            map.dispatch(new SitDownPositionChanged(this, isSitted));
-            dispatch(new SitDownPositionChanged(this, isSitted));
+            map.dispatch(new EmoteChanged(this, emoteId, emoteActivated));
+            dispatch(new EmoteChanged(this, emoteId, emoteActivated));
         }
     }
 }

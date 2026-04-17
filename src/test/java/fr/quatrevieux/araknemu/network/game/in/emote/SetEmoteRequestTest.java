@@ -16,22 +16,31 @@
  *
  * Copyright (c) 2017-2026 Leor Finacre
  */
-package fr.quatrevieux.araknemu.network.game.out.emote;
+package fr.quatrevieux.araknemu.network.game.in.emote;
 
-import fr.quatrevieux.araknemu.core.di.ContainerException;
-import fr.quatrevieux.araknemu.game.GameBaseCase;
-import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
+import fr.quatrevieux.araknemu.core.network.parser.ParsePacketException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.sql.SQLException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SitDownEmoteTest extends GameBaseCase {
+class SetEmoteRequestTest {
+    private SetEmoteRequest.Parser parser;
+
+    @BeforeEach
+    void setUp() {
+        parser = new SetEmoteRequest.Parser();
+    }
+
     @Test
-    void generate() throws SQLException, ContainerException {
-        ExplorationPlayer exploration = explorationPlayer();
+    void invalidEmote() {
+        assertThrows(ParsePacketException.class, () -> parser.parse("29"));
+    }
 
-        assertEquals("eUK6|1", new PlayerEmote(exploration, 1, false).toString());
+    @Test
+    void parse() {
+        assertEquals(SetEmoteRequest.Emote.SIT.getId(), parser.parse("1").emoteId());
+        assertEquals(SetEmoteRequest.Emote.REST.getId(), parser.parse("19").emoteId());
     }
 }
