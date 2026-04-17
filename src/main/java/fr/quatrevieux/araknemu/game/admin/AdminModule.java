@@ -54,12 +54,7 @@ import fr.quatrevieux.araknemu.game.admin.executor.argument.ArgumentsHydrator;
 import fr.quatrevieux.araknemu.game.admin.executor.argument.HydratorsAggregate;
 import fr.quatrevieux.araknemu.game.admin.global.GlobalContext;
 import fr.quatrevieux.araknemu.game.admin.global.Help;
-import fr.quatrevieux.araknemu.game.admin.player.AddXp;
-import fr.quatrevieux.araknemu.game.admin.player.GetItem;
-import fr.quatrevieux.araknemu.game.admin.player.LearnSpell;
-import fr.quatrevieux.araknemu.game.admin.player.PlayerContext;
-import fr.quatrevieux.araknemu.game.admin.player.PlayerContextResolver;
-import fr.quatrevieux.araknemu.game.admin.player.Spawn;
+import fr.quatrevieux.araknemu.game.admin.player.*;
 import fr.quatrevieux.araknemu.game.admin.player.teleport.CellResolver;
 import fr.quatrevieux.araknemu.game.admin.player.teleport.Goto;
 import fr.quatrevieux.araknemu.game.admin.player.teleport.LocationResolver;
@@ -196,6 +191,7 @@ public final class AdminModule implements ContainerModule {
                         add(new AddXp(context.player(), container.get(PlayerExperienceService.class)));
                         add(new LearnSpell(context.player(), container.get(SpellService.class)));
                         add(new Spawn(context.player(), container.get(FightService.class), container.get(MonsterEnvironmentService.class), container.get(MonsterGroupFactory.class)));
+                        add(new LearnEmote(context.player()));
                     }
                 }),
                 ctx -> container.with(ctx.player()),

@@ -28,7 +28,6 @@ import fr.quatrevieux.araknemu.game.exploration.creature.ExplorationCreature;
 import fr.quatrevieux.araknemu.game.exploration.creature.Explorer;
 import fr.quatrevieux.araknemu.game.exploration.creature.Operation;
 import fr.quatrevieux.araknemu.game.exploration.event.StopExploration;
-import fr.quatrevieux.araknemu.game.exploration.event.EmoteChanged;
 import fr.quatrevieux.araknemu.game.exploration.event.MapJoined;
 import fr.quatrevieux.araknemu.game.exploration.event.MapLeaved;
 import fr.quatrevieux.araknemu.game.exploration.event.MapChanged;
@@ -42,9 +41,11 @@ import fr.quatrevieux.araknemu.game.exploration.sprite.PlayerSprite;
 import fr.quatrevieux.araknemu.game.player.CharacterProperties;
 import fr.quatrevieux.araknemu.game.player.GamePlayer;
 import fr.quatrevieux.araknemu.game.player.PlayerSessionScope;
+import fr.quatrevieux.araknemu.game.player.emote.event.EmoteChanged;
 import fr.quatrevieux.araknemu.game.player.inventory.PlayerInventory;
 import fr.quatrevieux.araknemu.game.world.creature.Sprite;
 import fr.quatrevieux.araknemu.network.game.GameSession;
+import fr.quatrevieux.araknemu.network.game.in.emote.SetEmoteRequest;
 import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
@@ -63,7 +64,7 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
     private @Nullable ExplorationMap map;
     private @Nullable ExplorationMapCell cell;
     private Direction orientation = Direction.SOUTH_EAST;
-    private boolean emoteActivated;
+    private SetEmoteRequest.Emote currentEmote = SetEmoteRequest.Emote.NONE;
 
     @SuppressWarnings({"assignment", "argument"})
     public ExplorationPlayer(GamePlayer player) {
@@ -150,9 +151,8 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
     }
 
     @Pure
-    public boolean emoteActivated() { return emoteActivated; }
+    public SetEmoteRequest.Emote currentEmote() { return currentEmote; }
 
-    public void setEmoteActivated(boolean emoteActivated) { this.emoteActivated = emoteActivated; }
     /**
      * @todo Returns {@code Optional<ExplorationMap>}
      */
@@ -173,7 +173,7 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
         player.setPosition(player.position().newCell(cell.id()));
         this.cell = cell;
         this.orientation = orientation;
-        this.emoteActivated = false;
+        this.currentEmote = SetEmoteRequest.Emote.NONE;
 
         map.dispatch(new PlayerMoveFinished(this, cell));
         dispatch(new EmoteChanged(this, 0,false));
@@ -308,12 +308,37 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
     /**
      * Activate or desactivate emote
      */
-    public void setCurrentEmote(int emoteId, boolean emoteActivated) {
-        this.emoteActivated = emoteActivated;
+    public void setCurrentEmote(SetEmoteRequest.Emote requestedEmote) {
+        if(currentEmote == requestedEmote) {
+            if (requestedEmote.isStatic()) {
+                stopEmote(requestedEmote);
+                currentEmote = SetEmoteRequest.Emote.NONE;
+            } else {
+                playEmote(requestedEmote);
+            }
+            return;
+        }
+        if(currentEmote != SetEmoteRequest.Emote.NONE && currentEmote.isStatic()) {
+            stopEmote(currentEmote);
+        }
+        playEmote(requestedEmote);
+        if(requestedEmote.isStatic())
+            currentEmote = requestedEmote;
+        else
+            currentEmote = SetEmoteRequest.Emote.NONE;
+    }
 
+    private void playEmote(SetEmoteRequest.Emote emoteToPlay) {
         if (map != null) {
-            map.dispatch(new EmoteChanged(this, emoteId, emoteActivated));
-            dispatch(new EmoteChanged(this, emoteId, emoteActivated));
+            map.dispatch(new EmoteChanged(this, emoteToPlay.getId(), true));
+            dispatch(new EmoteChanged(this, emoteToPlay.getId(), true));
+        }
+    }
+
+    private void stopEmote(SetEmoteRequest.Emote emoteToStop) {
+        if (map != null) {
+            map.dispatch(new EmoteChanged(this, emoteToStop.getId(), false));
+            dispatch(new EmoteChanged(this, emoteToStop.getId(), false));
         }
     }
 }

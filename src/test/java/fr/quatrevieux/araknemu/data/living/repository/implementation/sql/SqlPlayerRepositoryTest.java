@@ -245,7 +245,7 @@ class SqlPlayerRepositoryTest extends DatabaseTestCase {
 
     @Test
     void insertWithPoints() {
-        Player player = repository.add(new Player(-1, 5, 1, "One", Race.FECA, Gender.MALE, new Colors(-1, -1, -1), 1, new DefaultCharacteristics(), new Position(123, 456), EnumSet.noneOf(ChannelType.class), 10, 15, 75, 125, new Position(321, 251), 127));
+        Player player = repository.add(new Player(-1, 5, 1, "One", Race.FECA, Gender.MALE, new Colors(-1, -1, -1), 1, new DefaultCharacteristics(), new Position(123, 456), EnumSet.noneOf(ChannelType.class), 10, 15, 75, 125, new Position(321, 251), 127, 1));
 
         player = repository.get(player);
 
@@ -257,7 +257,7 @@ class SqlPlayerRepositoryTest extends DatabaseTestCase {
 
     @Test
     void insertWithSavedPositionAndKamas() {
-        Player player = repository.add(new Player(-1, 5, 1, "One", Race.FECA, Gender.MALE, new Colors(-1, -1, -1), 1, new DefaultCharacteristics(), new Position(123, 456), EnumSet.noneOf(ChannelType.class), 10, 15, 75, 125, new Position(321, 251), 127));
+        Player player = repository.add(new Player(-1, 5, 1, "One", Race.FECA, Gender.MALE, new Colors(-1, -1, -1), 1, new DefaultCharacteristics(), new Position(123, 456), EnumSet.noneOf(ChannelType.class), 10, 15, 75, 125, new Position(321, 251), 127, 1));
 
         player = repository.get(player);
 

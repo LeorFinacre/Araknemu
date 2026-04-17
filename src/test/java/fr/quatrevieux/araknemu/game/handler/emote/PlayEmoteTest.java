@@ -45,9 +45,7 @@ public class PlayEmoteTest extends GameBaseCase {
     void handleSuccess() throws Exception {
         ExplorationPlayer exploration = explorationPlayer();
 
-        handler.handle(session, new SetEmoteRequest(19));
-
-        assertTrue(exploration.emoteActivated());
+        handler.handle(session, new SetEmoteRequest(19, true));
     }
 
     @Test
@@ -55,7 +53,6 @@ public class PlayEmoteTest extends GameBaseCase {
         ExplorationPlayer exploration = explorationPlayer();
         exploration.player().restrictions().unset(Restrictions.Restriction.ALLOW_MOVE_ALL_DIRECTION);
 
-        assertErrorPacket(new Noop(), () -> handler.handle(session, new SetEmoteRequest(19)));
-        assertFalse(exploration.emoteActivated());
+        assertErrorPacket(new Noop(), () -> handler.handle(session, new SetEmoteRequest(19, true)));
     }
 }

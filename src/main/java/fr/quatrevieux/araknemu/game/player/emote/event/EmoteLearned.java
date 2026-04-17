@@ -17,33 +17,18 @@
  * Copyright (c) 2017-2026 Leor Finacre
  */
 
-package fr.quatrevieux.araknemu.game.exploration.event;
+package fr.quatrevieux.araknemu.game.player.emote.event;
 
-import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
+import fr.quatrevieux.araknemu.network.game.in.emote.SetEmoteRequest;
 
-/**
- * Event for sitdown emote
- */
-public final class EmoteChanged {
-    private final ExplorationPlayer player;
-    private final boolean emoteActivated;
-    private final int emoteId;
+public class EmoteLearned {
+    SetEmoteRequest.Emote emoteLearned;
 
-    public int emoteId() {
-        return emoteId;
+    public EmoteLearned(SetEmoteRequest.Emote emoteLearned) {
+        this.emoteLearned = emoteLearned;
     }
 
-    public boolean emoteActivated() {
-        return emoteActivated;
-    }
-
-    public EmoteChanged(ExplorationPlayer player, int emoteId, boolean emoteActivated) {
-        this.player = player;
-        this.emoteActivated = emoteActivated;
-        this.emoteId = emoteId;
-    }
-
-    public ExplorationPlayer player() {
-        return player;
+    public SetEmoteRequest.Emote getEmoteLearned() {
+        return emoteLearned;
     }
 }

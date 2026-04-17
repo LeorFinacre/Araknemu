@@ -19,19 +19,31 @@
 package fr.quatrevieux.araknemu.game.handler.emote;
 
 import fr.quatrevieux.araknemu.core.network.exception.ErrorPacket;
+import fr.quatrevieux.araknemu.core.network.parser.ParsePacketException;
 import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
 import fr.quatrevieux.araknemu.game.handler.AbstractExploringPacketHandler;
 import fr.quatrevieux.araknemu.network.game.GameSession;
 import fr.quatrevieux.araknemu.network.game.in.emote.SetEmoteRequest;
 import fr.quatrevieux.araknemu.network.game.out.basic.Noop;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 public class PlayEmote extends AbstractExploringPacketHandler<SetEmoteRequest> {
+    private static final Map<Integer, SetEmoteRequest.Emote> emotes = Arrays.stream(SetEmoteRequest.Emote.values())
+            .collect(Collectors.toMap(SetEmoteRequest.Emote::getId, Function.identity()));
     @Override
     protected void handle(GameSession session, ExplorationPlayer exploration, SetEmoteRequest packet) throws Exception {
         if (!exploration.player().restrictions().canMoveAllDirections()) {
             throw new ErrorPacket(new Noop());
         }
-        exploration.setCurrentEmote(packet.emoteId(), !exploration.emoteActivated());
+        SetEmoteRequest.Emote emote = emotes.get(packet.emoteId());
+        if (emote == null) {
+            throw new ParsePacketException(String.valueOf(packet.emoteId()), "Emote ID " + packet.emoteId() + " is not supported");
+        }
+        exploration.setCurrentEmote(emote);
     }
 
     @Override

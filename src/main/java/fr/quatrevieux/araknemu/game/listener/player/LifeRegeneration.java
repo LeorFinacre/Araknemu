@@ -22,7 +22,7 @@ package fr.quatrevieux.araknemu.game.listener.player;
 import fr.quatrevieux.araknemu.core.event.EventsSubscriber;
 import fr.quatrevieux.araknemu.core.event.Listener;
 import fr.quatrevieux.araknemu.game.GameConfiguration;
-import fr.quatrevieux.araknemu.game.exploration.event.EmoteChanged;
+import fr.quatrevieux.araknemu.game.player.emote.event.EmoteChanged;
 import fr.quatrevieux.araknemu.game.exploration.event.StopExploration;
 import fr.quatrevieux.araknemu.game.player.characteristic.PlayerLife;
 import fr.quatrevieux.araknemu.network.game.out.info.StartLifeTimer;
@@ -47,7 +47,7 @@ public final class LifeRegeneration implements EventsSubscriber {
                     final int rate = configuration.baseLifeRegeneration();
 
                     PlayerLife life = event.player().player().properties().life();
-                    if (rate > 0 && (event.emoteId() == 1 && event.player().emoteActivated())) {
+                    if (rate > 0 && ((event.emoteId() == 1 || event.emoteId() == 19) && event.emoteActivated())) {
                         life.startLifeRegeneration(rate);
                         event.player().send(new StartLifeTimer(rate));
                     } else {
