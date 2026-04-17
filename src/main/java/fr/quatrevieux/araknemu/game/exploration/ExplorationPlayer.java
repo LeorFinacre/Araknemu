@@ -27,12 +27,7 @@ import fr.quatrevieux.araknemu.game.account.GameAccount;
 import fr.quatrevieux.araknemu.game.exploration.creature.ExplorationCreature;
 import fr.quatrevieux.araknemu.game.exploration.creature.Explorer;
 import fr.quatrevieux.araknemu.game.exploration.creature.Operation;
-import fr.quatrevieux.araknemu.game.exploration.event.CellChanged;
-import fr.quatrevieux.araknemu.game.exploration.event.MapChanged;
-import fr.quatrevieux.araknemu.game.exploration.event.MapJoined;
-import fr.quatrevieux.araknemu.game.exploration.event.MapLeaved;
-import fr.quatrevieux.araknemu.game.exploration.event.OrientationChanged;
-import fr.quatrevieux.araknemu.game.exploration.event.StopExploration;
+import fr.quatrevieux.araknemu.game.exploration.event.*;
 import fr.quatrevieux.araknemu.game.exploration.interaction.InteractionHandler;
 import fr.quatrevieux.araknemu.game.exploration.interaction.event.PlayerMoveFinished;
 import fr.quatrevieux.araknemu.game.exploration.map.ExplorationMap;
@@ -294,6 +289,15 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
 
         if (map != null) {
             map.dispatch(new OrientationChanged(this, orientation));
+        }
+    }
+
+    /**
+     * Set the player on his knees
+     */
+    public void setSitDownPosition() {
+        if (map != null) {
+            map.dispatch(new SitDownPositionChanged(this));
         }
     }
 }

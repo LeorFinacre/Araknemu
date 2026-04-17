@@ -41,6 +41,7 @@ import fr.quatrevieux.araknemu.network.game.in.dialog.ChosenResponse;
 import fr.quatrevieux.araknemu.network.game.in.dialog.CreateDialogRequest;
 import fr.quatrevieux.araknemu.network.game.in.dialog.LeaveDialogRequest;
 import fr.quatrevieux.araknemu.network.game.in.emote.SetOrientationRequest;
+import fr.quatrevieux.araknemu.network.game.in.emote.SetSitDownRequest;
 import fr.quatrevieux.araknemu.network.game.in.exchange.AcceptExchangeRequest;
 import fr.quatrevieux.araknemu.network.game.in.exchange.ExchangeReady;
 import fr.quatrevieux.araknemu.network.game.in.exchange.ExchangeRequest;
@@ -59,6 +60,12 @@ import fr.quatrevieux.araknemu.network.game.in.fight.TurnEnd;
 import fr.quatrevieux.araknemu.network.game.in.fight.option.BlockSpectatorRequest;
 import fr.quatrevieux.araknemu.network.game.in.fight.option.LockTeamRequest;
 import fr.quatrevieux.araknemu.network.game.in.fight.option.NeedHelpRequest;
+import fr.quatrevieux.araknemu.network.game.in.social.enemy.EnemyAddRequest;
+import fr.quatrevieux.araknemu.network.game.in.social.enemy.EnemyListRequest;
+import fr.quatrevieux.araknemu.network.game.in.social.enemy.EnemyRemoveRequest;
+import fr.quatrevieux.araknemu.network.game.in.social.friend.FriendAddRequest;
+import fr.quatrevieux.araknemu.network.game.in.social.friend.FriendListRequest;
+import fr.quatrevieux.araknemu.network.game.in.social.friend.FriendRemoveRequest;
 import fr.quatrevieux.araknemu.network.game.in.game.AskExtraInfo;
 import fr.quatrevieux.araknemu.network.game.in.game.CreateGameRequest;
 import fr.quatrevieux.araknemu.network.game.in.game.action.GameActionAcknowledge;
@@ -131,7 +138,14 @@ public final class GameParserLoader implements ParserLoader {
             new BlockSpectatorRequest.Parser(),
             new LockTeamRequest.Parser(),
             new NeedHelpRequest.Parser(),
-            new ShowCellRequest.Parser()
+            new ShowCellRequest.Parser(),
+            new SetSitDownRequest.Parser(),
+            new FriendListRequest.Parser(),
+            new FriendAddRequest.Parser(),
+            new FriendRemoveRequest.Parser(),
+            new EnemyListRequest.Parser(),
+            new EnemyAddRequest.Parser(),
+            new EnemyRemoveRequest.Parser()
         );
     }
 }
