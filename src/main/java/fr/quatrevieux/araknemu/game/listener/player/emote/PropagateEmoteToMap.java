@@ -17,38 +17,34 @@
  * Copyright (c) 2017-2026 Leor Finacre
  */
 
-package fr.quatrevieux.araknemu.game.player.emote.event;
+package fr.quatrevieux.araknemu.game.listener.player.emote;
 
-import fr.quatrevieux.araknemu.data.constant.Emote;
+import fr.quatrevieux.araknemu.core.event.Listener;
 import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
+import fr.quatrevieux.araknemu.game.exploration.map.ExplorationMap;
+import fr.quatrevieux.araknemu.game.player.emote.event.EmoteChanged;
 
 /**
- * Event for emotes
+ * Listener for propagating EmoteChanged event from player to the current map
  */
-public final class EmoteChanged {
+public final class PropagateEmoteToMap implements Listener<EmoteChanged> {
     private final ExplorationPlayer player;
-    private final boolean emoteActivated;
-    private final Emote emote;
 
-    public int getEmoteId() {
-        return emote.id();
-    }
-
-    public boolean isEmoteActivated() {
-        return emoteActivated;
-    }
-
-    public Emote getEmote() {
-        return emote;
-    }
-
-    public EmoteChanged(ExplorationPlayer player, Emote emote, boolean emoteActivated) {
+    public PropagateEmoteToMap(ExplorationPlayer player) {
         this.player = player;
-        this.emoteActivated = emoteActivated;
-        this.emote = emote;
     }
 
-    public ExplorationPlayer player() {
-        return player;
+    @Override
+    public void on(EmoteChanged event) {
+        ExplorationMap map = player.map();
+
+        if (map != null) {
+            map.dispatch(new EmoteChanged(player, event.getEmote(), event.isEmoteActivated()));
+        }
+    }
+
+    @Override
+    public Class<EmoteChanged> event() {
+        return EmoteChanged.class;
     }
 }

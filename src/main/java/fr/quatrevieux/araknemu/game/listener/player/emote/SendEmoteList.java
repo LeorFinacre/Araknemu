@@ -16,27 +16,31 @@
  *
  * Copyright (c) 2017-2026 Leor Finacre
  */
-package fr.quatrevieux.araknemu.game.listener.map;
+
+package fr.quatrevieux.araknemu.game.listener.player.emote;
 
 import fr.quatrevieux.araknemu.core.event.Listener;
-import fr.quatrevieux.araknemu.game.player.emote.event.EmoteChanged;
-import fr.quatrevieux.araknemu.game.exploration.map.ExplorationMap;
-import fr.quatrevieux.araknemu.network.game.out.emote.PlayerEmote;
+import fr.quatrevieux.araknemu.game.player.GamePlayer;
+import fr.quatrevieux.araknemu.game.player.event.GameJoined;
+import fr.quatrevieux.araknemu.network.game.out.emote.EmoteList;
 
-public class SendPlayerChangeEmote implements Listener<EmoteChanged> {
-    private final ExplorationMap map;
+/**
+ * Send emote list on join game
+ */
+public class SendEmoteList implements Listener<GameJoined>{
+    private final GamePlayer player;
 
-    public SendPlayerChangeEmote(ExplorationMap map) {
-        this.map = map;
+    public SendEmoteList(GamePlayer player) {
+        this.player = player;
     }
 
     @Override
-    public void on(EmoteChanged event) {
-        map.send(new PlayerEmote(event.player(), event.getEmote(), event.isEmoteActivated()));
+    public void on(GameJoined event) {
+        player.send(new EmoteList(player.getEmotes()));
     }
 
     @Override
-    public Class<EmoteChanged> event() {
-        return EmoteChanged.class;
+    public Class<GameJoined> event() {
+        return GameJoined.class;
     }
 }

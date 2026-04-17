@@ -19,36 +19,5 @@
 
 package fr.quatrevieux.araknemu.game.player.emote.event;
 
-import fr.quatrevieux.araknemu.data.constant.Emote;
-import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
-
-/**
- * Event for emotes
- */
-public final class EmoteChanged {
-    private final ExplorationPlayer player;
-    private final boolean emoteActivated;
-    private final Emote emote;
-
-    public int getEmoteId() {
-        return emote.id();
-    }
-
-    public boolean isEmoteActivated() {
-        return emoteActivated;
-    }
-
-    public Emote getEmote() {
-        return emote;
-    }
-
-    public EmoteChanged(ExplorationPlayer player, Emote emote, boolean emoteActivated) {
-        this.player = player;
-        this.emoteActivated = emoteActivated;
-        this.emote = emote;
-    }
-
-    public ExplorationPlayer player() {
-        return player;
-    }
+public class EmoteError {
 }

@@ -19,6 +19,7 @@
 package fr.quatrevieux.araknemu.network.game.out.emote;
 
 import fr.quatrevieux.araknemu.core.di.ContainerException;
+import fr.quatrevieux.araknemu.data.constant.Emote;
 import fr.quatrevieux.araknemu.game.GameBaseCase;
 import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
 import org.junit.jupiter.api.Test;
@@ -32,21 +33,21 @@ public class PlayerEmoteTest extends GameBaseCase {
     void generate() throws SQLException, ContainerException {
         ExplorationPlayer exploration = explorationPlayer();
 
-        assertEquals("eUK1|1", new PlayerEmote(exploration, 1, true).toString());
+        assertEquals("eUK1|1", new PlayerEmote(exploration, Emote.SIT, true).toString());
     }
 
     @Test
     void emoteId_should_return_constructor_value() throws SQLException, ContainerException {
         ExplorationPlayer exploration = explorationPlayer();
-        PlayerEmote playerEmote = new PlayerEmote(exploration, 5, true);
+        PlayerEmote playerEmote = new PlayerEmote(exploration, Emote.FEAR, true);
 
-        assertEquals(5, playerEmote.emoteId());
+        assertEquals(5, playerEmote.getEmote());
     }
 
     @Test
     void toString_activated_should_return_emote_id() throws SQLException, ContainerException {
         ExplorationPlayer exploration = explorationPlayer();
-        PlayerEmote playerEmote = new PlayerEmote(exploration, 1, true);
+        PlayerEmote playerEmote = new PlayerEmote(exploration, Emote.SIT, true);
 
         assertEquals("eUK" + exploration.id() + "|1", playerEmote.toString());
     }
@@ -54,7 +55,7 @@ public class PlayerEmoteTest extends GameBaseCase {
     @Test
     void toString_deactivated_should_return_zero() throws SQLException, ContainerException {
         ExplorationPlayer exploration = explorationPlayer();
-        PlayerEmote playerEmote = new PlayerEmote(exploration, 1, false);
+        PlayerEmote playerEmote = new PlayerEmote(exploration, Emote.SIT, false);
 
         assertEquals("eUK" + exploration.id() + "|0", playerEmote.toString());
     }

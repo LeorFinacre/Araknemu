@@ -19,20 +19,21 @@
 
 package fr.quatrevieux.araknemu.game.player.emote;
 
+import fr.quatrevieux.araknemu.data.constant.Emote;
 import fr.quatrevieux.araknemu.network.game.in.emote.SetEmoteRequest;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * List of emotes
  */
-public interface EmoteList extends Iterable<SetEmoteRequest.Emote> {
+public interface EmoteList extends Iterable<Emote> {
     /**
      * Get one emote by its id
      * {@link EmoteList#has(int)} must be called before, and returns true. If not undefined behavior can occur
      *
      * @param emoteId The emote id
      */
-    public SetEmoteRequest.Emote get(int emoteId);
+    public Emote get(int emoteId);
 
     /**
      * Check if the creature have the emote

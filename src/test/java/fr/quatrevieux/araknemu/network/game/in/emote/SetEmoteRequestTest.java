@@ -19,6 +19,7 @@
 package fr.quatrevieux.araknemu.network.game.in.emote;
 
 import fr.quatrevieux.araknemu.core.network.parser.ParsePacketException;
+import fr.quatrevieux.araknemu.data.constant.Emote;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,7 +41,7 @@ class SetEmoteRequestTest {
 
     @Test
     void parse() {
-        assertEquals(SetEmoteRequest.Emote.SIT.getId(), parser.parse("1").emoteId());
-        assertEquals(SetEmoteRequest.Emote.REST.getId(), parser.parse("19").emoteId());
+        assertEquals(Emote.SIT.id(), parser.parse("1").getEmoteId());
+        assertEquals(Emote.REST.id(), parser.parse("19").getEmoteId());
     }
 }

@@ -19,12 +19,13 @@
 
 package fr.quatrevieux.araknemu.game.listener;
 
+import fr.quatrevieux.araknemu.data.constant.Emote;
 import fr.quatrevieux.araknemu.game.GameBaseCase;
-import fr.quatrevieux.araknemu.game.listener.player.SendLearnedEmote;
+import fr.quatrevieux.araknemu.game.listener.player.emote.SendLearnedEmote;
 import fr.quatrevieux.araknemu.game.player.GamePlayer;
 import fr.quatrevieux.araknemu.game.player.emote.event.EmoteLearned;
-import fr.quatrevieux.araknemu.network.game.in.emote.SetEmoteRequest;
-import fr.quatrevieux.araknemu.network.game.out.chat.ServerMessage;
+import fr.quatrevieux.araknemu.network.game.out.emote.EmoteLearnedMessage;
+import fr.quatrevieux.araknemu.network.game.out.info.Information;
 import fr.quatrevieux.araknemu.network.game.out.emote.EmoteList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,12 +54,14 @@ public class SendLearnedEmoteTest extends GameBaseCase {
 
     @Test
     void onEmoteLearned() {
-        SetEmoteRequest.Emote emote = SetEmoteRequest.Emote.SIT;
+        Emote emote = Emote.SIT;
         listener.on(new EmoteLearned(emote));
+        requestStack.assertLast("eA"+emote.id());
 
         requestStack.assertAll(
-                new EmoteList(player.getEmotes()),
-                new ServerMessage("Tu connais une nouvelle attitude : " + emote.name())
+            new EmoteList(player.getEmotes()),
+            new EmoteLearnedMessage(emote.id())
         );
+        requestStack.assertLast("eA"+emote.id());
     }
 }

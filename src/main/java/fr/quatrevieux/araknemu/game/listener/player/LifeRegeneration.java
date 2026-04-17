@@ -22,6 +22,8 @@ package fr.quatrevieux.araknemu.game.listener.player;
 import fr.quatrevieux.araknemu.core.event.EventsSubscriber;
 import fr.quatrevieux.araknemu.core.event.Listener;
 import fr.quatrevieux.araknemu.game.GameConfiguration;
+import fr.quatrevieux.araknemu.data.constant.Emote;
+import fr.quatrevieux.araknemu.game.exploration.event.StartExploration;
 import fr.quatrevieux.araknemu.game.player.emote.event.EmoteChanged;
 import fr.quatrevieux.araknemu.game.exploration.event.StopExploration;
 import fr.quatrevieux.araknemu.game.player.characteristic.PlayerLife;
@@ -41,18 +43,36 @@ public final class LifeRegeneration implements EventsSubscriber {
     @Override
     public Listener[] listeners() {
         return new Listener[] {
+            new Listener<StartExploration>() {
+                @Override
+                public void on(StartExploration event) {
+                    final int rate = configuration.baseLifeRegeneration();
+
+                    if (rate > 0) {
+                        event.player().player().properties().life().startLifeRegeneration(rate);
+                        event.player().send(new StartLifeTimer(rate));
+                    }
+                }
+
+                @Override
+                public Class<StartExploration> event() {
+                    return StartExploration.class;
+                }
+            },
             new Listener<EmoteChanged>() {
                 @Override
                 public void on(EmoteChanged event) {
-                    final int rate = configuration.baseLifeRegeneration();
+                    int rate = configuration.baseLifeRegeneration();
+                    Emote emote = Emote.fromId(event.getEmoteId());
 
                     PlayerLife life = event.player().player().properties().life();
-                    if (rate > 0 && ((event.emoteId() == 1 || event.emoteId() == 19) && event.emoteActivated())) {
+                    if (rate > 0) {
+                        if (event.isEmoteActivated() && emote.boostsLifeRegeneration()) {
+                            rate *= 2;
+                        }
+                        
                         life.startLifeRegeneration(rate);
                         event.player().send(new StartLifeTimer(rate));
-                    } else {
-                        life.stopLifeRegeneration();
-                        event.player().send(new StopLifeTimer());
                     }
                 }
 

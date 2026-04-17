@@ -20,37 +20,36 @@
 package fr.quatrevieux.araknemu.game.player.emote;
 
 import fr.quatrevieux.araknemu.core.event.Dispatcher;
+import fr.quatrevieux.araknemu.data.constant.Emote;
 import fr.quatrevieux.araknemu.data.living.entity.player.Player;
+import fr.quatrevieux.araknemu.game.player.emote.event.EmoteError;
 import fr.quatrevieux.araknemu.game.player.emote.event.EmoteLearned;
-import fr.quatrevieux.araknemu.network.game.in.emote.SetEmoteRequest;
-import org.checkerframework.checker.nullness.qual.EnsuresKeyForIf;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.EnumSet;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.Set;
 
 public class EmoteBook implements EmoteList, Dispatcher {
     private final Dispatcher dispatcher;
     private final Player player;
-    Map<Integer, SetEmoteRequest.Emote> entries = new HashMap<>();
+    private final Set<Emote> entries = EnumSet.noneOf(Emote.class);
 
     @SuppressWarnings("argument")
     public EmoteBook(Dispatcher dispatcher, Player player) {
         this.dispatcher = dispatcher;
         this.player = player;
-        for (SetEmoteRequest.Emote emote : SetEmoteRequest.Emote.values()) {
-            if (emote != SetEmoteRequest.Emote.NONE && (player.emotes() & emote.getBitmask()) != 0) {
-                this.entries.put(emote.getId(), emote);
+        for (Emote emote : Emote.values()) {
+            if (emote != Emote.NONE && (player.emotes() & emote.bitmask()) != 0) {
+                this.entries.add(emote);
             }
         }
     }
 
     @Override
-    public SetEmoteRequest.Emote get(int emoteId) {
-        SetEmoteRequest.Emote emote = entries.get(emoteId);
-
-        return emote != null ? emote : SetEmoteRequest.Emote.NONE;
+    public Emote get(int emoteId) {
+        Emote emote = Emote.fromId(emoteId);
+        return entries.contains(emote) ? emote : Emote.NONE;
     }
 
     @Override
@@ -59,17 +58,15 @@ public class EmoteBook implements EmoteList, Dispatcher {
     }
 
     @Override
-    public Iterator<SetEmoteRequest.Emote> iterator() {
-        return entries.values().stream()
-                .iterator()
-                ;
+    public Iterator<Emote> iterator() {
+        return entries.iterator();
     }
 
     /**
      * Get all available emotes
      */
-    public Collection<SetEmoteRequest.Emote> all() {
-        return entries.values();
+    public Collection<Emote> all() {
+        return entries;
     }
 
 
@@ -79,12 +76,8 @@ public class EmoteBook implements EmoteList, Dispatcher {
      * @param emoteId Emote to check
      */
     @Override
-    @EnsuresKeyForIf(result = true, expression = "#1", map = "entries")
-    @SuppressWarnings("contracts.conditional.postcondition") // checker do not consider null check as key existence
     public boolean has(int emoteId) {
-        final SetEmoteRequest.Emote entry = entries.get(emoteId);
-
-        return entry != null;
+        return entries.contains(Emote.fromId(emoteId));
     }
 
     /**
@@ -92,19 +85,19 @@ public class EmoteBook implements EmoteList, Dispatcher {
      *
      * @param emote Emote to learn
      */
-    public boolean canLearn(SetEmoteRequest.Emote emote) {
-        return !has(emote.getId());
+    public boolean canLearn(Emote emote) {
+        return !entries.contains(emote);
     }
 
     /**
      * Learn an emote
      */
-    public void learn(SetEmoteRequest.Emote emoteToLearn) {
+    public void learn(Emote emoteToLearn) {
         if (!canLearn(emoteToLearn)) {
-            throw new IllegalArgumentException("Cannot learn the emote " + emoteToLearn.name() + " (" + emoteToLearn.getId() + ")");
+            throw new IllegalArgumentException("Cannot learn the emote " + emoteToLearn.name() + " (" + emoteToLearn.id() + ")");
         }
-        player.setEmotes(Math.max(player.emotes() | emoteToLearn.getBitmask(), 0));
-        entries.put(emoteToLearn.getId(), emoteToLearn);
+        player.setEmotes(Math.max(player.emotes() | emoteToLearn.bitmask(), 0));
+        entries.add(emoteToLearn);
         dispatch(new EmoteLearned(emoteToLearn));
     }
 

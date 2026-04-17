@@ -19,16 +19,25 @@
 
 package fr.quatrevieux.araknemu.game.handler.emote;
 
+<<<<<<< HEAD
 import fr.quatrevieux.araknemu.game.GameBaseCase;
 import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
 import fr.quatrevieux.araknemu.game.player.Restrictions;
+=======
+import fr.quatrevieux.araknemu.data.constant.Emote;
+import fr.quatrevieux.araknemu.game.GameBaseCase;
+import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
+>>>>>>> 56e247ac (feat: Add the possibility to play and learn emotes to the game)
 import fr.quatrevieux.araknemu.network.game.in.emote.SetEmoteRequest;
 import fr.quatrevieux.araknemu.network.game.out.basic.Noop;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+<<<<<<< HEAD
 import static org.junit.jupiter.api.Assertions.assertTrue;
+=======
+>>>>>>> 56e247ac (feat: Add the possibility to play and learn emotes to the game)
 
 public class PlayEmoteTest extends GameBaseCase {
     private PlayEmote handler;
@@ -44,6 +53,7 @@ public class PlayEmoteTest extends GameBaseCase {
     @Test
     void handleSuccess() throws Exception {
         ExplorationPlayer exploration = explorationPlayer();
+<<<<<<< HEAD
 
         handler.handle(session, new SetEmoteRequest(19, true));
     }
@@ -54,5 +64,32 @@ public class PlayEmoteTest extends GameBaseCase {
         exploration.player().restrictions().unset(Restrictions.Restriction.ALLOW_MOVE_ALL_DIRECTION);
 
         assertErrorPacket(new Noop(), () -> handler.handle(session, new SetEmoteRequest(19, true)));
+=======
+        exploration.player().getEmotes().learn(Emote.APPL);
+
+        handler.handle(session, new SetEmoteRequest(Emote.APPL, false));
+
+        requestStack.assertLast("eUK" + exploration.id() + "|" + Emote.APPL.id());
+    }
+
+    @Test
+    void handleSitSuccess() throws Exception {
+        ExplorationPlayer exploration = explorationPlayer();
+        if (!exploration.player().getEmotes().has(Emote.SIT.id())) {
+            exploration.player().getEmotes().learn(Emote.SIT);
+        }
+
+        handler.handle(session, new SetEmoteRequest(Emote.SIT, true));
+
+        requestStack.assertLast("eUK" + exploration.id() + "|" + Emote.SIT.id());
+    }
+
+    @Test
+    void handleUnlearnedEmoteShouldFail() throws Exception {
+        ExplorationPlayer exploration = explorationPlayer();
+
+        assertFalse(exploration.player().getEmotes().has(Emote.POINT.id()));
+        assertErrorPacket(new Noop(), () -> handler.handle(session, new SetEmoteRequest(Emote.POINT, true)));
+>>>>>>> 56e247ac (feat: Add the possibility to play and learn emotes to the game)
     }
 }

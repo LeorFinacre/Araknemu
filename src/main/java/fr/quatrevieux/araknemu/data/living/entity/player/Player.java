@@ -79,7 +79,7 @@ public final class Player implements WalletEntity {
     }
 
     public Player(int id, int accountId, int serverId, String name, Race race, Gender gender, Colors colors, @Positive int level, MutableCharacteristics characteristics) {
-        this(id, accountId, serverId, name, race, gender, colors, level, characteristics, new Position(0, 0), EnumSet.noneOf(ChannelType.class), 0, 0, Integer.MAX_VALUE, 0, new Position(0, 0), 0, 1);
+        this(id, accountId, serverId, name, race, gender, colors, level, characteristics, new Position(0, 0), EnumSet.noneOf(ChannelType.class), 0, 0, Integer.MAX_VALUE, 0, new Position(0, 0), 0, 0);
     }
 
     public Player(int id) {
@@ -242,6 +242,6 @@ public final class Player implements WalletEntity {
      * @see fr.quatrevieux.araknemu.data.living.repository.player.PlayerRepository#getForGame(Player)
      */
     public static Player forGame(int playerId, int accountId, int serverId) {
-        return new Player(playerId, accountId, serverId, null, null, null, null, 1, null, null, null, 0, 0, Integer.MAX_VALUE, 0, null, 0, 1);
+        return new Player(playerId, accountId, serverId, null, null, null, null, 1, null, null, null, 0, 0, Integer.MAX_VALUE, 0, null, 0, 0);
     }
 }

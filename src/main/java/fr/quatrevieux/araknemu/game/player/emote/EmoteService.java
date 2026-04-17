@@ -21,14 +21,13 @@ package fr.quatrevieux.araknemu.game.player.emote;
 
 import fr.quatrevieux.araknemu.core.event.EventsSubscriber;
 import fr.quatrevieux.araknemu.core.event.Listener;
-import fr.quatrevieux.araknemu.game.PreloadableService;
-import fr.quatrevieux.araknemu.game.listener.player.SendEmoteList;
-import fr.quatrevieux.araknemu.game.listener.player.SendEmoteListOnLearned;
-import fr.quatrevieux.araknemu.game.listener.player.SendLearnedEmote;
+import fr.quatrevieux.araknemu.game.listener.player.emote.AddDefaultEmote;
+import fr.quatrevieux.araknemu.game.listener.player.emote.SendEmoteErrorMessage;
+import fr.quatrevieux.araknemu.game.listener.player.emote.SendEmoteList;
+import fr.quatrevieux.araknemu.game.listener.player.emote.SendLearnedEmote;
 import fr.quatrevieux.araknemu.game.player.event.PlayerLoaded;
-import org.apache.logging.log4j.Logger;
 
-public class EmoteService implements EventsSubscriber {
+public final class EmoteService implements EventsSubscriber {
 
     @Override
     public Listener[] listeners() {
@@ -38,14 +37,15 @@ public class EmoteService implements EventsSubscriber {
                 public void on(PlayerLoaded event) {
                     event.player().dispatcher().add(new SendEmoteList(event.player()));
                     event.player().dispatcher().add(new SendLearnedEmote(event.player()));
-                    event.player().dispatcher().add(new SendEmoteListOnLearned(event.player()));
+                    event.player().dispatcher().add(new SendEmoteErrorMessage(event.player()));
                 }
 
                 @Override
                 public Class<PlayerLoaded> event() {
                     return PlayerLoaded.class;
                 }
-            }
+            },
+            new AddDefaultEmote()
         };
     }
 }

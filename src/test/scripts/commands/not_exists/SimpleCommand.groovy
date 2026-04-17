@@ -14,30 +14,27 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Araknemu.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (c) 2017-2026 Leor Finacre
+ * Copyright (c) 2017-2021 Vincent Quatrevieux
  */
-package fr.quatrevieux.araknemu.network.game.out.emote;
 
-import fr.quatrevieux.araknemu.data.constant.Emote;
-import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
+import fr.quatrevieux.araknemu.game.admin.AbstractCommand
+import fr.quatrevieux.araknemu.game.admin.AdminPerformer
+import fr.quatrevieux.araknemu.game.admin.exception.AdminException
 
-public class PlayerEmote {
-    private final ExplorationPlayer player;
-    private final boolean emoteActivated;
-    private final Emote emote;
-
-    public Emote getEmote() {
-        return emote;
-    }
-
-    public PlayerEmote(ExplorationPlayer player, Emote emote, boolean emoteActivated) {
-        this.player = player;
-        this.emoteActivated = emoteActivated;
-        this.emote = emote;
+class SimpleCommand extends AbstractCommand<String> {
+    @Override
+    protected void build(Builder builder) {
+        builder.help({it
+            .synopsis("simple ARG")
+            .description("My description")
+        })
     }
 
     @Override
-    public String toString() {
-        return "eUK" + player.id() + "|" + (emoteActivated ? emote.id() : "0");
+    String name() { "simple" }
+
+    @Override
+    void execute(AdminPerformer performer, String arguments) throws AdminException {
+        performer.info("Execute command {} with argument {}", name(), arguments)
     }
 }

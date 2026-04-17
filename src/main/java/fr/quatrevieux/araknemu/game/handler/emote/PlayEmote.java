@@ -20,8 +20,10 @@ package fr.quatrevieux.araknemu.game.handler.emote;
 
 import fr.quatrevieux.araknemu.core.network.exception.ErrorPacket;
 import fr.quatrevieux.araknemu.core.network.parser.ParsePacketException;
+import fr.quatrevieux.araknemu.data.constant.Emote;
 import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
 import fr.quatrevieux.araknemu.game.handler.AbstractExploringPacketHandler;
+import fr.quatrevieux.araknemu.game.player.emote.event.EmoteError;
 import fr.quatrevieux.araknemu.network.game.GameSession;
 import fr.quatrevieux.araknemu.network.game.in.emote.SetEmoteRequest;
 import fr.quatrevieux.araknemu.network.game.out.basic.Noop;
@@ -32,16 +34,17 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class PlayEmote extends AbstractExploringPacketHandler<SetEmoteRequest> {
-    private static final Map<Integer, SetEmoteRequest.Emote> emotes = Arrays.stream(SetEmoteRequest.Emote.values())
-            .collect(Collectors.toMap(SetEmoteRequest.Emote::getId, Function.identity()));
+    private static final Map<Integer, Emote> emotes = Arrays.stream(Emote.values())
+            .collect(Collectors.toMap(Emote::id, Function.identity()));
     @Override
     protected void handle(GameSession session, ExplorationPlayer exploration, SetEmoteRequest packet) throws Exception {
-        if (!exploration.player().restrictions().canMoveAllDirections()) {
-            throw new ErrorPacket(new Noop());
-        }
-        SetEmoteRequest.Emote emote = emotes.get(packet.emoteId());
+        Emote emote = emotes.get(packet.getEmoteId());
         if (emote == null) {
-            throw new ParsePacketException(String.valueOf(packet.emoteId()), "Emote ID " + packet.emoteId() + " is not supported");
+            throw new ParsePacketException(String.valueOf(packet.getEmoteId()), "Emote ID " + packet.getEmoteId() + " is not supported");
+        }
+        if (!exploration.player().getEmotes().has(emote.id())) {
+            exploration.dispatch(new EmoteError());
+            return;
         }
         exploration.setCurrentEmote(emote);
     }

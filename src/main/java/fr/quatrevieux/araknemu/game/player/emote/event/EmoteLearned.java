@@ -19,16 +19,16 @@
 
 package fr.quatrevieux.araknemu.game.player.emote.event;
 
-import fr.quatrevieux.araknemu.network.game.in.emote.SetEmoteRequest;
+import fr.quatrevieux.araknemu.data.constant.Emote;
 
-public class EmoteLearned {
-    SetEmoteRequest.Emote emoteLearned;
+public final class EmoteLearned {
+    private final Emote emoteLearned;
 
-    public EmoteLearned(SetEmoteRequest.Emote emoteLearned) {
+    public EmoteLearned(Emote emoteLearned) {
         this.emoteLearned = emoteLearned;
     }
 
-    public SetEmoteRequest.Emote getEmoteLearned() {
+    public Emote getEmoteLearned() {
         return emoteLearned;
     }
 }

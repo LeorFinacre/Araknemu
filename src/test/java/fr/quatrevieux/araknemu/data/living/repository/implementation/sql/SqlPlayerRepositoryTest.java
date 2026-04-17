@@ -26,6 +26,7 @@ import fr.quatrevieux.araknemu.DatabaseTestCase;
 import fr.quatrevieux.araknemu.core.dbal.executor.ConnectionPoolExecutor;
 import fr.quatrevieux.araknemu.core.dbal.repository.EntityNotFoundException;
 import fr.quatrevieux.araknemu.data.constant.Characteristic;
+import fr.quatrevieux.araknemu.data.constant.Emote;
 import fr.quatrevieux.araknemu.data.living.entity.account.Account;
 import fr.quatrevieux.araknemu.data.living.entity.player.Player;
 import fr.quatrevieux.araknemu.data.living.repository.account.AccountRepository;
@@ -369,5 +370,14 @@ class SqlPlayerRepositoryTest extends DatabaseTestCase {
         assertTrue(repository.serverCharactersCountByAccountPseudo("not_found").isEmpty());
 
         accountRepository.destroy();
+    }
+
+    @Test
+    void insertWithEmotes() {
+        long expectedEmotes = Emote.SIT.bitmask();
+
+        Player player = repository.add(new Player(-1, 5, 1, "One", Race.FECA, Gender.MALE, new Colors(-1, -1, -1), 1, new DefaultCharacteristics(), new Position(123, 456), EnumSet.noneOf(ChannelType.class), 10, 15, 75, 125, new Position(321, 251), 127, expectedEmotes));
+        player = repository.get(player);
+        assertEquals(expectedEmotes, player.emotes());
     }
 }

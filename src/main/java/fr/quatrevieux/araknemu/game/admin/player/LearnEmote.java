@@ -20,6 +20,7 @@
 package fr.quatrevieux.araknemu.game.admin.player;
 
 import fr.quatrevieux.araknemu.common.account.Permission;
+import fr.quatrevieux.araknemu.data.constant.Emote;
 import fr.quatrevieux.araknemu.game.admin.AbstractCommand;
 import fr.quatrevieux.araknemu.game.admin.AdminPerformer;
 import fr.quatrevieux.araknemu.game.admin.exception.AdminException;
@@ -38,14 +39,14 @@ public class LearnEmote extends AbstractCommand<LearnEmote.Arguments> {
     @Override
     protected void build(AbstractCommand<Arguments>.Builder builder) {
         builder
-                .help(
-                        formatter -> formatter
-                                .description("Add the given emote to the player")
-                                .synopsis("learnemote")
-                                .example("@John learnemote 19", "John will learn the emote rest ")
-                )
-                .requires(Permission.MANAGE_PLAYER)
-                .arguments(Arguments::new)
+            .help(
+        formatter -> formatter
+                .description("Add the given emote to the player")
+                .synopsis("learnemote")
+                .example("@John learnemote 19", "John will learn the emote rest ")
+            )
+            .requires(Permission.MANAGE_PLAYER)
+            .arguments(Arguments::new)
         ;
     }
 
@@ -56,14 +57,14 @@ public class LearnEmote extends AbstractCommand<LearnEmote.Arguments> {
 
     @Override
     public void execute(AdminPerformer performer, Arguments arguments) throws AdminException {
-        final SetEmoteRequest.Emote emoteToLearn;
+        final Emote emoteToLearn;
 
-        emoteToLearn = SetEmoteRequest.Emote.fromId(arguments.emoteId);
-        if(emoteToLearn == SetEmoteRequest.Emote.NONE) {
+        emoteToLearn = Emote.fromId(arguments.emoteId);
+        if(emoteToLearn == Emote.NONE) {
             performer.error("Emote {} not found", arguments.emoteId);
             return;
         }
-
+        
         final EmoteBook emote = player.getEmotes();
 
         if(!emote.canLearn(emoteToLearn)){

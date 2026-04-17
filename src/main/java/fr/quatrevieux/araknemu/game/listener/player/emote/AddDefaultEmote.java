@@ -17,38 +17,20 @@
  * Copyright (c) 2017-2026 Leor Finacre
  */
 
-package fr.quatrevieux.araknemu.game.player.emote.event;
+package fr.quatrevieux.araknemu.game.listener.player.emote;
 
+import fr.quatrevieux.araknemu.core.event.Listener;
 import fr.quatrevieux.araknemu.data.constant.Emote;
-import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
+import fr.quatrevieux.araknemu.game.account.event.CharacterCreationStarted;
 
-/**
- * Event for emotes
- */
-public final class EmoteChanged {
-    private final ExplorationPlayer player;
-    private final boolean emoteActivated;
-    private final Emote emote;
-
-    public int getEmoteId() {
-        return emote.id();
+public class AddDefaultEmote implements Listener<CharacterCreationStarted> {
+    @Override
+    public void on(CharacterCreationStarted event) {
+        event.character().character().setEmotes(Emote.SIT.bitmask());
     }
 
-    public boolean isEmoteActivated() {
-        return emoteActivated;
-    }
-
-    public Emote getEmote() {
-        return emote;
-    }
-
-    public EmoteChanged(ExplorationPlayer player, Emote emote, boolean emoteActivated) {
-        this.player = player;
-        this.emoteActivated = emoteActivated;
-        this.emote = emote;
-    }
-
-    public ExplorationPlayer player() {
-        return player;
+    @Override
+    public Class<CharacterCreationStarted> event() {
+        return CharacterCreationStarted.class;
     }
 }
