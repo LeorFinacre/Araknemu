@@ -22,8 +22,10 @@ package fr.quatrevieux.araknemu.game.listener.player;
 import fr.quatrevieux.araknemu.core.event.EventsSubscriber;
 import fr.quatrevieux.araknemu.core.event.Listener;
 import fr.quatrevieux.araknemu.game.GameConfiguration;
+import fr.quatrevieux.araknemu.game.exploration.event.SitDownPositionChanged;
 import fr.quatrevieux.araknemu.game.exploration.event.StartExploration;
 import fr.quatrevieux.araknemu.game.exploration.event.StopExploration;
+import fr.quatrevieux.araknemu.game.player.characteristic.PlayerLife;
 import fr.quatrevieux.araknemu.network.game.out.info.StartLifeTimer;
 import fr.quatrevieux.araknemu.network.game.out.info.StopLifeTimer;
 
@@ -40,20 +42,24 @@ public final class LifeRegeneration implements EventsSubscriber {
     @Override
     public Listener[] listeners() {
         return new Listener[] {
-            new Listener<StartExploration>() {
+            new Listener<SitDownPositionChanged>() {
                 @Override
-                public void on(StartExploration event) {
+                public void on(SitDownPositionChanged event) {
                     final int rate = configuration.baseLifeRegeneration();
 
-                    if (rate > 0) {
-                        event.player().player().properties().life().startLifeRegeneration(rate);
+                    PlayerLife life = event.player().player().properties().life();
+                    if (rate > 0 && event.player().isSitted()) {
+                        life.startLifeRegeneration(rate);
                         event.player().send(new StartLifeTimer(rate));
+                    } else {
+                        life.stopLifeRegeneration();
+                        event.player().send(new StopLifeTimer());
                     }
                 }
 
                 @Override
-                public Class<StartExploration> event() {
-                    return StartExploration.class;
+                public Class<SitDownPositionChanged> event() {
+                    return SitDownPositionChanged.class;
                 }
             },
 

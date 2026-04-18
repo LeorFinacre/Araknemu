@@ -170,6 +170,7 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
         this.isSitted = false;
 
         map.dispatch(new PlayerMoveFinished(this, cell));
+        dispatch(new SitDownPositionChanged(this, false));
     }
 
     @Override
@@ -306,6 +307,7 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
 
         if (map != null) {
             map.dispatch(new SitDownPositionChanged(this, isSitted));
+            dispatch(new SitDownPositionChanged(this, isSitted));
         }
     }
 }
