@@ -14,7 +14,7 @@ public class SendPlayerChangeSitDownPosition implements Listener<SitDownPosition
 
     @Override
     public void on(SitDownPositionChanged event) {
-        map.send(new SitDownEmote(event.player()));
+        map.send(new SitDownEmote(event.player(), event.player().isSitted()));
     }
 
     @Override

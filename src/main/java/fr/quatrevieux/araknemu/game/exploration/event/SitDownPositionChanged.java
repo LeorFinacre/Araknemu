@@ -26,9 +26,11 @@ import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
  */
 public final class SitDownPositionChanged {
     private final ExplorationPlayer player;
+    boolean isSitted;
 
-    public SitDownPositionChanged(ExplorationPlayer player) {
+    public SitDownPositionChanged(ExplorationPlayer player, boolean isSitted) {
         this.player = player;
+        this.isSitted = isSitted;
     }
 
     public ExplorationPlayer player() {

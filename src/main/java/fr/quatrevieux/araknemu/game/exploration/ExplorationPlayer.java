@@ -57,6 +57,7 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
     private @Nullable ExplorationMap map;
     private @Nullable ExplorationMapCell cell;
     private Direction orientation = Direction.SOUTH_EAST;
+    private boolean isSitted;
 
     @SuppressWarnings({"assignment", "argument"})
     public ExplorationPlayer(GamePlayer player) {
@@ -142,6 +143,10 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
         return orientation;
     }
 
+    @Pure
+    public boolean isSitted() { return isSitted; }
+
+    public void setIsSitted(boolean isSitted) { this.isSitted = isSitted; }
     /**
      * @todo Returns {@code Optional<ExplorationMap>}
      */
@@ -162,6 +167,7 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
         player.setPosition(player.position().newCell(cell.id()));
         this.cell = cell;
         this.orientation = orientation;
+        this.isSitted = false;
 
         map.dispatch(new PlayerMoveFinished(this, cell));
     }
@@ -295,9 +301,11 @@ public final class ExplorationPlayer implements ExplorationCreature, Explorer, P
     /**
      * Set the player on his knees
      */
-    public void setSitDownPosition() {
+    public void setSitDownPosition(boolean isSitted) {
+        this.isSitted = isSitted;
+
         if (map != null) {
-            map.dispatch(new SitDownPositionChanged(this));
+            map.dispatch(new SitDownPositionChanged(this, isSitted));
         }
     }
 }

@@ -15,6 +15,6 @@ public class SitDownEmoteTest extends GameBaseCase {
     void generate() throws SQLException, ContainerException {
         ExplorationPlayer exploration = explorationPlayer();
 
-        assertEquals("eUK6|1", new SitDownEmote(exploration).toString());
+        assertEquals("eUK6|1", new SitDownEmote(exploration, false).toString());
     }
 }
