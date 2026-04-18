@@ -52,6 +52,7 @@ public final class PlayerContext extends AbstractContext<PlayerContext> {
             .add(new Save(player))
             .add(new Message(player))
             .add(new Kick(player))
+            .add(new MapInfo(player))
         ;
     }
 
