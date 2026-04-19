@@ -130,6 +130,9 @@ import fr.quatrevieux.araknemu.game.exploration.npc.dialog.parameter.ParametersR
 import fr.quatrevieux.araknemu.game.exploration.npc.dialog.parameter.VariableResolver;
 import fr.quatrevieux.araknemu.game.exploration.npc.exchange.NpcExchangeService;
 import fr.quatrevieux.araknemu.game.exploration.npc.store.NpcStoreService;
+import fr.quatrevieux.araknemu.game.exploration.party.DefaultInvitationFactory;
+import fr.quatrevieux.araknemu.game.exploration.party.InvitationFactory;
+import fr.quatrevieux.araknemu.game.exploration.party.PlayerInvitationFactories;
 import fr.quatrevieux.araknemu.game.fight.Fight;
 import fr.quatrevieux.araknemu.game.fight.FightService;
 import fr.quatrevieux.araknemu.game.fight.ai.factory.AggregateAiFactory;
@@ -1141,5 +1144,19 @@ public final class GameModule implements ContainerModule {
             container.get(GameConfiguration.class),
             container.get(fr.quatrevieux.araknemu.core.event.Dispatcher.class)
         ));
+<<<<<<< Updated upstream
+=======
+
+        configurator.persist(
+                FriendService.class,
+                container -> new FriendService(
+                        container.get(FriendRepository.class)
+                )
+        );
+
+        configurator.persist(InvitationFactory.class, container -> new DefaultInvitationFactory(
+                new PlayerInvitationFactories()
+        ));
+>>>>>>> Stashed changes
     }
 }

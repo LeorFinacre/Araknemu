@@ -68,6 +68,7 @@ import fr.quatrevieux.araknemu.network.game.in.info.ScreenInfo;
 import fr.quatrevieux.araknemu.network.game.in.object.ObjectDeleteRequest;
 import fr.quatrevieux.araknemu.network.game.in.object.ObjectMoveRequest;
 import fr.quatrevieux.araknemu.network.game.in.object.ObjectUseRequest;
+import fr.quatrevieux.araknemu.network.game.in.social.party.PartyRequest;
 import fr.quatrevieux.araknemu.network.game.in.spell.SpellMove;
 import fr.quatrevieux.araknemu.network.game.in.spell.SpellUpgrade;
 
@@ -131,7 +132,19 @@ public final class GameParserLoader implements ParserLoader {
             new BlockSpectatorRequest.Parser(),
             new LockTeamRequest.Parser(),
             new NeedHelpRequest.Parser(),
+<<<<<<< Updated upstream
             new ShowCellRequest.Parser()
+=======
+            new ShowCellRequest.Parser(),
+            new SetSitDownRequest.Parser(),
+            new FriendListRequest.Parser(),
+            new FriendAddRequest.Parser(),
+            new FriendRemoveRequest.Parser(),
+            new EnemyListRequest.Parser(),
+            new EnemyAddRequest.Parser(),
+            new EnemyRemoveRequest.Parser(),
+            new PartyRequest.Parser()
+>>>>>>> Stashed changes
         );
     }
 }
