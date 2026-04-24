@@ -75,6 +75,8 @@ import fr.quatrevieux.araknemu.network.game.in.info.ScreenInfo;
 import fr.quatrevieux.araknemu.network.game.in.object.ObjectDeleteRequest;
 import fr.quatrevieux.araknemu.network.game.in.object.ObjectMoveRequest;
 import fr.quatrevieux.araknemu.network.game.in.object.ObjectUseRequest;
+import fr.quatrevieux.araknemu.network.game.in.social.guild.GuildListRequest;
+import fr.quatrevieux.araknemu.network.game.in.social.guild.GuildListRequest;
 import fr.quatrevieux.araknemu.network.game.in.spell.SpellMove;
 import fr.quatrevieux.araknemu.network.game.in.spell.SpellUpgrade;
 
@@ -145,7 +147,8 @@ public final class GameParserLoader implements ParserLoader {
             new EnemyListRequest.Parser(),
             new EnemyAddRequest.Parser(),
             new EnemyRemoveRequest.Parser(),
-            new SetEmoteRequest.Parser()
+            new SetEmoteRequest.Parser(),
+            new GuildListRequest.Parser()
         );
     }
 }

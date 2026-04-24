@@ -35,6 +35,8 @@ import fr.quatrevieux.araknemu.data.living.repository.player.PlayerItemRepositor
 import fr.quatrevieux.araknemu.data.living.repository.player.PlayerRepository;
 import fr.quatrevieux.araknemu.data.living.repository.player.PlayerSpellRepository;
 import fr.quatrevieux.araknemu.data.living.repository.social.friend.FriendRepository;
+import fr.quatrevieux.araknemu.data.living.repository.social.guild.GuildMemberRepository;
+import fr.quatrevieux.araknemu.data.living.repository.social.guild.GuildRepository;
 import fr.quatrevieux.araknemu.data.living.transformer.ChannelsTransformer;
 import fr.quatrevieux.araknemu.data.living.transformer.InstantTransformer;
 import fr.quatrevieux.araknemu.data.living.transformer.IpAddressTransformer;
@@ -151,6 +153,16 @@ public final class SqlLivingRepositoriesModule implements ContainerModule {
         configurator.persist(
                 FriendRepository.class,
                 container -> new SqlFriendRepository(executor, container.get(GameConfiguration.class))
+        );
+
+        configurator.persist(
+                GuildRepository.class,
+                container -> new SqlGuildRepository(executor)
+        );
+
+        configurator.persist(
+                GuildMemberRepository.class,
+                container -> new SqlGuildMemberRepository(executor, container.get(GuildMemberRepository.class), container.get(GuildRepository.class))
         );
 
         configurator.persist(InstantTransformer.class, container -> new InstantTransformer());
