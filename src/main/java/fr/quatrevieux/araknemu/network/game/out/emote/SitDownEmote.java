@@ -4,15 +4,15 @@ import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
 
 public class SitDownEmote {
     private final ExplorationPlayer player;
-    boolean isSitted;
+    boolean emoteActivated;
 
-    public SitDownEmote(ExplorationPlayer player, boolean isSitted) {
+    public SitDownEmote(ExplorationPlayer player, boolean emoteActivated) {
         this.player = player;
-        this.isSitted = isSitted;
+        this.emoteActivated = emoteActivated;
     }
 
     @Override
     public String toString() {
-        return "eUK" + player.id() + "|" + (isSitted ? "1" : "0");
+        return "eUK" + player.id() + "|" + (emoteActivated ? "1" : "0");
     }
 }

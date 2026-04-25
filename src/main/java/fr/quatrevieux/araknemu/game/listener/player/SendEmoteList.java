@@ -14,26 +14,33 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Araknemu.  If not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright (c) 2017-2019 Vincent Quatrevieux
+ * Copyright (c) 2017-2026 Leor Finacre
  */
 
-package fr.quatrevieux.araknemu.game.exploration.event;
+package fr.quatrevieux.araknemu.game.listener.player;
 
-import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
+import fr.quatrevieux.araknemu.core.event.Listener;
+import fr.quatrevieux.araknemu.game.player.GamePlayer;
+import fr.quatrevieux.araknemu.game.player.event.GameJoined;
+import fr.quatrevieux.araknemu.network.game.out.emote.EmoteList;
 
 /**
- * Event for sitdown emote
+ * Send emote list on join game
  */
-public final class SitDownPositionChanged {
-    private final ExplorationPlayer player;
-    boolean isSitted;
+public class SendEmoteList implements Listener<GameJoined> {
+    private final GamePlayer player;
 
-    public SitDownPositionChanged(ExplorationPlayer player, boolean isSitted) {
+    public SendEmoteList(GamePlayer player) {
         this.player = player;
-        this.isSitted = isSitted;
     }
 
-    public ExplorationPlayer player() {
-        return player;
+    @Override
+    public void on(GameJoined event) {
+        player.send(new EmoteList(player.entity().emotes()));
+    }
+
+    @Override
+    public Class<GameJoined> event() {
+        return GameJoined.class;
     }
 }

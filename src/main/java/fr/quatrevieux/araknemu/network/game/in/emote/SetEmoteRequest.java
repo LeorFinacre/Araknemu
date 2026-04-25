@@ -26,42 +26,42 @@ import org.checkerframework.common.value.qual.MinLen;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SetEmoteRequest implements Packet {
     public enum Emote {
-        SIT(1),
-        BYE(2),
-        APPL(3),
-        MAD(4),
-        FEAR(5),
-        WIP(6),
-        PIPO(7),
-        OUPS(8),
-        HI(9),
-        KISS(10),
-        PFC1(11),
-        PFC2(12),
-        PFC3(13),
-        CROSS(14),
-        POINT(15),
-        CROW(16),
-        REST(19),
-        CHAMP(21),
-        AURA(22),
-        BAT(23);
+        SIT(1, 1),
+        BYE(2, 2),
+        APPL(3, 4),
+        MAD(4, 8),
+        FEAR(5, 16),
+        WIP(6, 32),
+        PIPO(7, 64),
+        OUPS(8, 128),
+        HI(9, 256),
+        KISS(10, 512),
+        PFC1(11, 1024),
+        PFC2(12, 2048),
+        PFC3(13, 4096),
+        CROSS(14, 8192),
+        POINT(15, 16384),
+        CROW(16, 32768),
+        REST(19, 262144),
+        CHAMP(21, 1048576),
+        AURA(22, 2097152),
+        BAT(23, 4194304);
 
         private final int id;
+        private final long bitmask;
 
-        Emote(int id) {
+        Emote(int id, long bitmask) {
             this.id = id;
+            this.bitmask = bitmask;
         }
 
-        public int getId() {
-            return id;
-        }
+        public int getId() { return id; }
+        public long getBitmask() { return bitmask; }
     }
 
     private final int emoteId;

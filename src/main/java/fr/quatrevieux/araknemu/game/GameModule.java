@@ -252,6 +252,7 @@ import fr.quatrevieux.araknemu.game.monster.group.generator.MonsterListGenerator
 import fr.quatrevieux.araknemu.game.monster.group.generator.RandomMonsterListGenerator;
 import fr.quatrevieux.araknemu.game.monster.reward.MonsterRewardService;
 import fr.quatrevieux.araknemu.game.player.PlayerService;
+import fr.quatrevieux.araknemu.game.player.emote.EmoteService;
 import fr.quatrevieux.araknemu.game.player.experience.PlayerExperienceService;
 import fr.quatrevieux.araknemu.game.player.inventory.InventoryService;
 import fr.quatrevieux.araknemu.game.player.race.PlayerRaceService;
@@ -330,6 +331,7 @@ public final class GameModule implements ContainerModule {
                     container.get(ChatService.class),
                     container.get(InventoryService.class),
                     container.get(SpellBookService.class),
+                    container.get(EmoteService.class),
                     container.get(PlayerExperienceService.class),
                     container.get(FightService.class),
                     container.get(ExplorationService.class),
@@ -640,6 +642,12 @@ public final class GameModule implements ContainerModule {
                 container.get(PlayerSpellRepository.class),
                 container.get(SpellService.class),
                 container.get(PlayerRaceService.class)
+            )
+        );
+
+        configurator.persist(
+            EmoteService.class,
+            container -> new EmoteService(
             )
         );
 
