@@ -103,7 +103,7 @@ public final class InventorySlots {
         add(new BootsSlot(dispatcher, storage, owner));
         add(new HelmetSlot(dispatcher, storage, owner));
         add(new MantleSlot(dispatcher, storage, owner));
-        add(new NullSlot(8)); // pet
+        add(new PetSlot(dispatcher, storage, owner)); // pet
 
         initDofusSlots(owner);
         initNullSlots();
