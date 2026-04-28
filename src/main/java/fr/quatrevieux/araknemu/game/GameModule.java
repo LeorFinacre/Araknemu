@@ -890,7 +890,8 @@ public final class GameModule implements ContainerModule {
                 new WearableFactory(SuperType.SHIELD, container.get(EffectToCharacteristicMapping.class), container.get(EffectToSpecialMapping.class)),
                 new WearableFactory(SuperType.HELMET, container.get(EffectToCharacteristicMapping.class), container.get(EffectToSpecialMapping.class)),
                 new WearableFactory(SuperType.MANTLE, container.get(EffectToCharacteristicMapping.class), container.get(EffectToSpecialMapping.class)),
-                new WearableFactory(SuperType.DOFUS, container.get(EffectToCharacteristicMapping.class), container.get(EffectToSpecialMapping.class))
+                new WearableFactory(SuperType.DOFUS, container.get(EffectToCharacteristicMapping.class), container.get(EffectToSpecialMapping.class)),
+                new WearableFactory(SuperType.PET, container.get(EffectToCharacteristicMapping.class), container.get(EffectToSpecialMapping.class))
             )
         );
 
