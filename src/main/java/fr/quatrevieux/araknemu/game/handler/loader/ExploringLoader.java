@@ -43,6 +43,8 @@ import fr.quatrevieux.araknemu.game.handler.fight.ListFights;
 import fr.quatrevieux.araknemu.game.handler.fight.ShowFightDetails;
 import fr.quatrevieux.araknemu.game.handler.game.CancelGameAction;
 import fr.quatrevieux.araknemu.game.handler.game.LoadExtraInfo;
+import fr.quatrevieux.araknemu.game.handler.social.guild.GuildInfoMember;
+import fr.quatrevieux.araknemu.game.handler.social.guild.GuildList;
 import fr.quatrevieux.araknemu.network.game.GameSession;
 
 /**
@@ -71,6 +73,8 @@ public final class ExploringLoader implements Loader {
             new SellItem(),
             new GoToGeolocation(container.get(GeolocationService.class)),
             new PlayEmote(),
+            new GuildList(),
+            new GuildInfoMember()
         };
     }
 }

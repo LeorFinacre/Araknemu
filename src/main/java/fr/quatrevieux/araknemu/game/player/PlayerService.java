@@ -19,6 +19,7 @@
 
 package fr.quatrevieux.araknemu.game.player;
 
+import com.github.javaparser.quality.Nullable;
 import fr.quatrevieux.araknemu.core.dbal.repository.RepositoryException;
 import fr.quatrevieux.araknemu.core.event.Dispatcher;
 import fr.quatrevieux.araknemu.core.event.EventsSubscriber;
@@ -44,6 +45,7 @@ import fr.quatrevieux.araknemu.game.player.experience.PlayerExperienceService;
 import fr.quatrevieux.araknemu.game.player.inventory.InventoryService;
 import fr.quatrevieux.araknemu.game.player.race.PlayerRaceService;
 import fr.quatrevieux.araknemu.game.player.spell.SpellBookService;
+import fr.quatrevieux.araknemu.game.social.guild.GuildService;
 import fr.quatrevieux.araknemu.game.world.util.Sender;
 import fr.quatrevieux.araknemu.network.game.GameSession;
 
@@ -66,11 +68,12 @@ public final class PlayerService implements EventsSubscriber, Sender {
     private final PlayerRaceService playerRaceService;
     private final SpellBookService spellBookService;
     private final PlayerExperienceService experienceService;
+    private final GuildService guildService;
 
     private final ConcurrentMap<Integer, GamePlayer> onlinePlayers = new ConcurrentHashMap<>();
     private final ConcurrentMap<String, GamePlayer> playersByName  = new ConcurrentHashMap<>();
 
-    public PlayerService(PlayerRepository repository, GameConfiguration configuration, Dispatcher dispatcher, InventoryService inventoryService, PlayerRaceService playerRaceService, SpellBookService spellBookService, PlayerExperienceService experienceService) {
+    public PlayerService(PlayerRepository repository, GameConfiguration configuration, Dispatcher dispatcher, InventoryService inventoryService, PlayerRaceService playerRaceService, SpellBookService spellBookService, PlayerExperienceService experienceService, @Nullable GuildService guildService) {
         this.repository = repository;
         this.configuration = configuration;
         this.playerConfiguration = configuration.player();
@@ -79,6 +82,7 @@ public final class PlayerService implements EventsSubscriber, Sender {
         this.playerRaceService = playerRaceService;
         this.spellBookService = spellBookService;
         this.experienceService = experienceService;
+        this.guildService = guildService;
     }
 
     /**
@@ -112,7 +116,8 @@ public final class PlayerService implements EventsSubscriber, Sender {
             this,
             inventoryService.load(player),
             spellBookService.load(session, player),
-            experienceService.load(session, player)
+            experienceService.load(session, player),
+            guildService.getByPlayerId(player.id())
         );
 
         gamePlayer.dispatcher().add(Disconnected.class, e -> logout(gamePlayer));
@@ -214,5 +219,6 @@ public final class PlayerService implements EventsSubscriber, Sender {
     private void logout(GamePlayer player) {
         onlinePlayers.remove(player.id());
         playersByName.remove(player.name().toLowerCase());
+        guildService.detach(player);
     }
 }

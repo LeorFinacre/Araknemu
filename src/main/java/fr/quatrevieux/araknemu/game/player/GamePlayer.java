@@ -22,6 +22,7 @@ package fr.quatrevieux.araknemu.game.player;
 import fr.quatrevieux.araknemu.core.event.DefaultListenerAggregate;
 import fr.quatrevieux.araknemu.core.event.ListenerAggregate;
 import fr.quatrevieux.araknemu.data.living.entity.player.Player;
+import fr.quatrevieux.araknemu.data.living.entity.social.PlayerGuild;
 import fr.quatrevieux.araknemu.data.value.Position;
 import fr.quatrevieux.araknemu.game.account.GameAccount;
 import fr.quatrevieux.araknemu.game.chat.ChannelSet;
@@ -37,7 +38,9 @@ import fr.quatrevieux.araknemu.game.player.race.GamePlayerRace;
 import fr.quatrevieux.araknemu.game.player.spell.SpellBook;
 import fr.quatrevieux.araknemu.game.player.sprite.GamePlayerSpriteInfo;
 import fr.quatrevieux.araknemu.game.player.sprite.SpriteInfo;
+import fr.quatrevieux.araknemu.game.social.guild.GameGuild;
 import fr.quatrevieux.araknemu.network.game.GameSession;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 
 import java.util.Set;
@@ -58,13 +61,14 @@ public final class GamePlayer implements PlayerSessionScope {
     private final PlayerData data;
     private final Restrictions restrictions;
     private final EmoteBook emotes;
+    private final @Nullable GameGuild guild;
 
     private final ListenerAggregate dispatcher = new DefaultListenerAggregate();
 
     private PlayerSessionScope scope;
 
     @SuppressWarnings({"assignment", "argument"})
-    public GamePlayer(GameAccount account, Player entity, GamePlayerRace race, GameSession session, PlayerService service, LoadedInventory inventory, SpellBook spells, GamePlayerExperience experience) {
+    public GamePlayer(GameAccount account, Player entity, GamePlayerRace race, GameSession session, PlayerService service, LoadedInventory inventory, SpellBook spells, GamePlayerExperience experience, @Nullable GameGuild guild) {
         this.account = account;
         this.entity = entity;
         this.race = race;
@@ -76,6 +80,7 @@ public final class GamePlayer implements PlayerSessionScope {
         this.data = new PlayerData(dispatcher, this, entity, spells, experience);
         this.spriteInfo = new GamePlayerSpriteInfo(entity, this.inventory);
         this.restrictions = new Restrictions(session);
+        this.guild = guild;
 
         this.scope = this;
 
@@ -221,6 +226,9 @@ public final class GamePlayer implements PlayerSessionScope {
         return session.exploration() != null;
     }
 
+    @Pure
+    public boolean isOnline() { return session.isLogged();}
+
     /**
      * Get the exploration player
      *
@@ -316,6 +324,14 @@ public final class GamePlayer implements PlayerSessionScope {
     @Pure
     public EmoteBook getEmotes() {
         return emotes;
+    }
+
+    /**
+     * Get the current player guild
+     */
+    @Pure
+    public @Nullable GameGuild getGuild() {
+        return guild;
     }
 
     /**

@@ -17,19 +17,25 @@
  * Copyright (c) 2017-2026 Leor Finacre
  */
 
-package fr.quatrevieux.araknemu.network.game.out.social.guild;
+package fr.quatrevieux.araknemu.data.world.entity.guild;
 
-public class GuildListResponse {
-    private final int playerId;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.Positive;
 
-    public GuildListResponse(int playerId) {
-        this.playerId = playerId;
+public final class GuildExperience {
+    private final @Positive int level;
+    private final @NonNegative long experience;
+
+    public GuildExperience(@Positive int level, @NonNegative long experience) {
+        this.level = level;
+        this.experience = experience;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("gIG0|1|0|0|1100");
+    public @Positive int level() {
+        return level;
+    }
 
-        return sb.toString();
+    public @NonNegative long experience() {
+        return experience;
     }
 }

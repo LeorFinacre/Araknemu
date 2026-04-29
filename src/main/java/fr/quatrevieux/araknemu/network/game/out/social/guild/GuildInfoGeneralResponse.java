@@ -19,17 +19,28 @@
 
 package fr.quatrevieux.araknemu.network.game.out.social.guild;
 
-public class GuildListResponse {
-    private final int playerId;
+import com.github.javaparser.quality.Nullable;
+import fr.quatrevieux.araknemu.game.social.guild.GameGuild;
 
-    public GuildListResponse(int playerId) {
-        this.playerId = playerId;
+public class GuildInfoGeneralResponse {
+    private final GameGuild guild;
+
+    public GuildInfoGeneralResponse(@Nullable GameGuild guild) {
+        this.guild = guild;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("gIG0|1|0|0|1100");
-
+        final StringBuilder sb = new StringBuilder("gIG");
+        if(guild != null) {
+            sb
+                .append(guild.members().size() >= 9 ? "1" : "0").append("|")
+                .append(guild.level()).append("|")
+                .append("10").append("|")
+                .append(guild.totalExperience()).append("|")
+                .append("100");
+        }
         return sb.toString();
     }
 }
+

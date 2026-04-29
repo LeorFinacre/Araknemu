@@ -25,6 +25,7 @@ import fr.quatrevieux.araknemu.core.dbal.executor.LoggedQueryExecutor;
 import fr.quatrevieux.araknemu.core.dbal.executor.QueryExecutor;
 import fr.quatrevieux.araknemu.core.di.ContainerConfigurator;
 import fr.quatrevieux.araknemu.core.di.ContainerModule;
+import fr.quatrevieux.araknemu.data.living.entity.social.GuildEmblem;
 import fr.quatrevieux.araknemu.data.transformer.ImmutableCharacteristicsTransformer;
 import fr.quatrevieux.araknemu.data.transformer.SpellTargetsTransformer;
 import fr.quatrevieux.araknemu.data.world.repository.SpellTemplateRepository;
@@ -39,6 +40,7 @@ import fr.quatrevieux.araknemu.data.world.repository.environment.npc.NpcReposito
 import fr.quatrevieux.araknemu.data.world.repository.environment.npc.NpcTemplateRepository;
 import fr.quatrevieux.araknemu.data.world.repository.environment.npc.QuestionRepository;
 import fr.quatrevieux.araknemu.data.world.repository.environment.npc.ResponseActionRepository;
+import fr.quatrevieux.araknemu.data.world.repository.guild.GuildExperienceRepository;
 import fr.quatrevieux.araknemu.data.world.repository.implementation.local.AreaRepositoryCache;
 import fr.quatrevieux.araknemu.data.world.repository.implementation.local.ItemSetRepositoryCache;
 import fr.quatrevieux.araknemu.data.world.repository.implementation.local.ItemTemplateRepositoryCache;
@@ -55,18 +57,7 @@ import fr.quatrevieux.araknemu.data.world.repository.monster.MonsterGroupPositio
 import fr.quatrevieux.araknemu.data.world.repository.monster.MonsterRewardItemRepository;
 import fr.quatrevieux.araknemu.data.world.repository.monster.MonsterRewardRepository;
 import fr.quatrevieux.araknemu.data.world.repository.monster.MonsterTemplateRepository;
-import fr.quatrevieux.araknemu.data.world.transformer.BoostStatsDataTransformer;
-import fr.quatrevieux.araknemu.data.world.transformer.ColorsTransformer;
-import fr.quatrevieux.araknemu.data.world.transformer.EffectAreaTransformer;
-import fr.quatrevieux.araknemu.data.world.transformer.ExchangeItemsTransformer;
-import fr.quatrevieux.araknemu.data.world.transformer.FightPlacesTransformer;
-import fr.quatrevieux.araknemu.data.world.transformer.ItemEffectsTransformer;
-import fr.quatrevieux.araknemu.data.world.transformer.ItemSetBonusTransformer;
-import fr.quatrevieux.araknemu.data.world.transformer.MapCellsTransformer;
-import fr.quatrevieux.araknemu.data.world.transformer.MonsterListTransformer;
-import fr.quatrevieux.araknemu.data.world.transformer.RaceBaseStatsTransformer;
-import fr.quatrevieux.araknemu.data.world.transformer.SpellTemplateLevelTransformer;
-import fr.quatrevieux.araknemu.data.world.transformer.WeaponsAbilitiesTransformer;
+import fr.quatrevieux.araknemu.data.world.transformer.*;
 import org.apache.logging.log4j.LogManager;
 
 /**
@@ -290,5 +281,15 @@ public final class SqlWorldRepositoriesModule implements ContainerModule {
 
         configurator.persist(WeaponsAbilitiesTransformer.class, container -> new WeaponsAbilitiesTransformer());
         configurator.persist(SpellTargetsTransformer.class, container -> new SpellTargetsTransformer());
+
+        configurator.persist(
+                GuildEmblemTransformer.class,
+                container -> new GuildEmblemTransformer()
+        );
+
+        configurator.persist(
+            GuildExperienceRepository.class,
+                container -> new SqlGuildExperienceRepository(executor)
+        );
     }
 }

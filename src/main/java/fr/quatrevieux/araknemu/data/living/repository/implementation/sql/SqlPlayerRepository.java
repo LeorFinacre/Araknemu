@@ -265,6 +265,16 @@ final class SqlPlayerRepository implements PlayerRepository {
     }
 
     @Override
+    public Player findById(int playerId) {
+        return utils.findOne(
+            "SELECT * FROM PLAYER WHERE PLAYER_ID = ?",
+            stmt -> {
+                stmt.setInt(1, playerId);
+            }
+        );
+    }
+
+    @Override
     public void save(Player player) {
         final int rows = utils.update(
             "UPDATE PLAYER SET " +

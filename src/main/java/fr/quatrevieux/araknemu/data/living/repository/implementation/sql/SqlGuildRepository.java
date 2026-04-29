@@ -24,29 +24,37 @@ import fr.quatrevieux.araknemu.core.dbal.repository.EntityNotFoundException;
 import fr.quatrevieux.araknemu.core.dbal.repository.Record;
 import fr.quatrevieux.araknemu.core.dbal.repository.RepositoryException;
 import fr.quatrevieux.araknemu.core.dbal.repository.RepositoryUtils;
-import fr.quatrevieux.araknemu.data.living.entity.social.Friend;
-import fr.quatrevieux.araknemu.data.living.entity.social.Guild;
+import fr.quatrevieux.araknemu.data.living.entity.account.BankItem;
+import fr.quatrevieux.araknemu.data.living.entity.social.GuildEmblem;
+import fr.quatrevieux.araknemu.data.living.entity.social.PlayerGuild;
 import fr.quatrevieux.araknemu.data.living.repository.social.guild.GuildRepository;
+import fr.quatrevieux.araknemu.data.transformer.Transformer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 
-public class SqlGuildRepository implements GuildRepository {
+/**
+ * SQL implementation for {@link PlayerGuild} repository
+ */
+final class SqlGuildRepository implements GuildRepository {
     private final QueryExecutor executor;
-    private final RepositoryUtils<Guild> utils;
+    private final RepositoryUtils<PlayerGuild> utils;
+    private final Transformer<GuildEmblem> emblemTransformer;
 
-    public SqlGuildRepository(QueryExecutor executor) {
+    public SqlGuildRepository(QueryExecutor executor, Transformer<GuildEmblem> emblemTransformer) {
         this.executor = executor;
+        this.emblemTransformer = emblemTransformer;
         this.utils = new RepositoryUtils<>(this.executor, new SqlGuildRepository.Loader());
     }
 
     @Override
-    public Guild add(Guild entity) throws RepositoryException {
+    public PlayerGuild add(PlayerGuild entity) throws RepositoryException {
         utils.update(
                 "REPLACE INTO GUILDS (`NAME`, `EMBLEM`) VALUES (?, ?)",
                 rs -> {
                     rs.setString(1, entity.getName());
-                    rs.setString(2, entity.getEmblem());
+                    rs.setString(2, entity.getEmblem().toString());
                 }
         );
 
@@ -54,7 +62,7 @@ public class SqlGuildRepository implements GuildRepository {
     }
 
     @Override
-    public void delete(Guild entity) {
+    public void delete(PlayerGuild entity) {
         final int count = utils.update(
                 "DELETE FROM GUILDS WHERE ID = ?", rs -> {
                     rs.setInt(1, entity.getId());
@@ -97,7 +105,7 @@ public class SqlGuildRepository implements GuildRepository {
     }
 
     @Override
-    public Guild get(Guild entity) throws RepositoryException {
+    public PlayerGuild get(PlayerGuild entity) throws RepositoryException {
         try {
             return utils.findOne("SELECT * FROM GUILDS WHERE ID = ?", rs -> {
                 rs.setInt(1, entity.getId());
@@ -108,14 +116,14 @@ public class SqlGuildRepository implements GuildRepository {
     }
 
     @Override
-    public boolean has(Guild entity) throws RepositoryException {
+    public boolean has(PlayerGuild entity) throws RepositoryException {
         return utils.aggregate("SELECT COUNT(*) FROM GUILDS WHERE ID = ?", rs -> {
             rs.setInt(1, entity.getId());
         }) > 0;
     }
 
     @Override
-    public Guild getGuildById(int guildId) {
+    public PlayerGuild getGuildById(int guildId) {
         try {
             return utils.findOne("SELECT * FROM GUILDS WHERE ID = ?", rs -> {
                 rs.setInt(1, guildId);
@@ -125,13 +133,18 @@ public class SqlGuildRepository implements GuildRepository {
         }
     }
 
-    private static class Loader implements RepositoryUtils.Loader<Guild> {
+    @Override
+    public Collection<PlayerGuild> load() {
+        return utils.findAll("SELECT * FROM GUILDS");
+    }
+
+    private class Loader implements RepositoryUtils.Loader<PlayerGuild> {
         @Override
-        public Guild create(Record record) throws SQLException {
-            return new Guild(
+        public PlayerGuild create(Record record) throws SQLException {
+            return new PlayerGuild(
                     record.getInt("ID"),
                     record.getString("NAME"),
-                    record.getString("EMBLEM"),
+                    record.unserialize("EMBLEM", emblemTransformer),
                     record.getInt("LEVEL"),
                     record.getInt("EXPERIENCE"),
                     record.getInt("CAPITAL"),
@@ -142,7 +155,7 @@ public class SqlGuildRepository implements GuildRepository {
         }
 
         @Override
-        public Guild fillKeys(Guild entity, ResultSet keys) {
+        public PlayerGuild fillKeys(PlayerGuild entity, ResultSet keys) {
             throw new UnsupportedOperationException();
         }
     }

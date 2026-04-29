@@ -79,6 +79,11 @@ public interface PlayerRepository extends MutableRepository<Player> {
     public Player getForGame(Player player);
 
     /**
+     * Get the player entity by it's id
+     */
+    public Player findById(int playerId);
+
+    /**
      * Save the player entity
      *
      * @throws fr.quatrevieux.araknemu.core.dbal.repository.EntityNotFoundException When the entity cannot be updated

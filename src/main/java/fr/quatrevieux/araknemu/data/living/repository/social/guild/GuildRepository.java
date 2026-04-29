@@ -19,12 +19,18 @@
 
 package fr.quatrevieux.araknemu.data.living.repository.social.guild;
 
-import fr.quatrevieux.araknemu.core.dbal.repository.EntityNotFoundException;
 import fr.quatrevieux.araknemu.core.dbal.repository.MutableRepository;
-import fr.quatrevieux.araknemu.core.dbal.repository.RepositoryException;
-import fr.quatrevieux.araknemu.data.living.entity.social.Guild;
+import fr.quatrevieux.araknemu.data.living.entity.social.PlayerGuild;
+import fr.quatrevieux.araknemu.data.world.entity.character.PlayerRace;
 
-public interface GuildRepository extends MutableRepository<Guild> {
+import java.util.Collection;
 
-    public Guild getGuildById(int guildId);
+public interface GuildRepository extends MutableRepository<PlayerGuild> {
+
+    public PlayerGuild getGuildById(int guildId);
+
+    /**
+     * Load all guilds
+     */
+    public Collection<PlayerGuild> load();
 }

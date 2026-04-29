@@ -25,6 +25,7 @@ import fr.arakne.utils.value.constant.Gender;
 import fr.arakne.utils.value.constant.Race;
 import fr.quatrevieux.araknemu.game.exploration.ExplorationPlayer;
 import fr.quatrevieux.araknemu.game.player.sprite.SpriteSize;
+import fr.quatrevieux.araknemu.game.social.guild.GameGuild;
 import fr.quatrevieux.araknemu.game.world.creature.Sprite;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -110,6 +111,7 @@ public final class PlayerSprite implements Sprite {
         final String accessories = exploration.player().spriteInfo().accessories().toString();
         final int restrictions = exploration.restrictions().toInt();
         final String lastResult = constantPart;
+        final @Nullable GameGuild guild = exploration.player().getGuild();
 
         int newHash = 17 * id;
 
@@ -139,7 +141,8 @@ public final class PlayerSprite implements Sprite {
             accessories + ";" +
             ";" + // @todo aura
             ";;" + // @todo emote; emote timer
-            ";;" + // @todo guild; guild emblem
+            (guild != null ? guild.name() : ";") + ";" +
+            (guild != null ? guild.emblem().replace("|", ",") : ";") + ";" +
             Integer.toString(restrictions, 36) + ";"
         // @todo mount
         ;

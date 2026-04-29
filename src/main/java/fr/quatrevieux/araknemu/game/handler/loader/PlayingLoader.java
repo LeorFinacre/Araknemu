@@ -22,7 +22,6 @@ package fr.quatrevieux.araknemu.game.handler.loader;
 import fr.quatrevieux.araknemu.core.di.Container;
 import fr.quatrevieux.araknemu.core.di.ContainerException;
 import fr.quatrevieux.araknemu.core.network.parser.PacketHandler;
-import fr.quatrevieux.araknemu.game.GameConfiguration;
 import fr.quatrevieux.araknemu.game.account.AccountService;
 import fr.quatrevieux.araknemu.game.chat.ChatService;
 import fr.quatrevieux.araknemu.game.exploration.ExplorationService;
@@ -43,10 +42,13 @@ import fr.quatrevieux.araknemu.game.handler.social.friend.FriendRemove;
 import fr.quatrevieux.araknemu.game.handler.game.CreateGame;
 import fr.quatrevieux.araknemu.game.handler.object.MoveObject;
 import fr.quatrevieux.araknemu.game.handler.object.RemoveObject;
+import fr.quatrevieux.araknemu.game.handler.social.guild.GuildInfoMember;
+import fr.quatrevieux.araknemu.game.handler.social.guild.GuildList;
 import fr.quatrevieux.araknemu.game.handler.spell.MoveSpell;
 import fr.quatrevieux.araknemu.game.handler.spell.UpgradeSpell;
 import fr.quatrevieux.araknemu.game.player.PlayerService;
 import fr.quatrevieux.araknemu.game.social.friend.FriendService;
+import fr.quatrevieux.araknemu.game.social.guild.GuildService;
 import fr.quatrevieux.araknemu.network.game.GameSession;
 
 /**
@@ -77,6 +79,8 @@ public final class PlayingLoader implements Loader {
             new EnemyAdd(container.get(FriendService.class), container.get(PlayerService.class)),
             new EnemyList(container.get(FriendService.class), container.get(AccountService.class), container.get(PlayerService.class)),
             new EnemyRemove(container.get(FriendService.class), container.get(AccountService.class)),
+            new GuildList(),
+            new GuildInfoMember()
         };
     }
 }

@@ -19,17 +19,31 @@
 
 package fr.quatrevieux.araknemu.network.game.out.social.guild;
 
-public class GuildListResponse {
-    private final int playerId;
+import com.github.javaparser.quality.Nullable;
+import fr.quatrevieux.araknemu.game.player.GamePlayer;
+import fr.quatrevieux.araknemu.game.social.guild.GameGuild;
+import fr.quatrevieux.araknemu.game.social.guild.GameGuildMember;
 
-    public GuildListResponse(int playerId) {
-        this.playerId = playerId;
+public class GuildStatsResponse {
+    private final GamePlayer player;
+
+    public GuildStatsResponse(@Nullable GamePlayer player) {
+        this.player = player;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("gIG0|1|0|0|1100");
-
+        GameGuild guild = player.getGuild();
+        final StringBuilder sb = new StringBuilder("gS");
+        if(guild != null) {
+            GameGuildMember guildMember = guild.member(player.id());
+            if(guildMember != null) {
+                sb
+                    .append(guild.name()).append("|")
+                    .append(guild.emblem()).append("|")
+                    .append(guildMember.rights());
+            }
+        }
         return sb.toString();
     }
 }

@@ -22,15 +22,14 @@ package fr.quatrevieux.araknemu.game.handler.social.guild;
 import fr.quatrevieux.araknemu.game.account.GameAccount;
 import fr.quatrevieux.araknemu.game.handler.AbstractLoggedPacketHandler;
 import fr.quatrevieux.araknemu.game.player.GamePlayer;
-import fr.quatrevieux.araknemu.game.social.guild.GuildService;
 import fr.quatrevieux.araknemu.network.game.GameSession;
-import fr.quatrevieux.araknemu.network.game.in.social.guild.GuildListRequest;
-import fr.quatrevieux.araknemu.network.game.out.social.guild.GuildInfoGeneralResponse;
+import fr.quatrevieux.araknemu.network.game.in.social.guild.GuildInfoMemberRequest;
+import fr.quatrevieux.araknemu.network.game.out.social.guild.GuildInfoMemberResponse;
 
-public class GuildList extends AbstractLoggedPacketHandler<GuildListRequest> {
+public class GuildInfoMember extends AbstractLoggedPacketHandler<GuildInfoMemberRequest> {
 
     @Override
-    protected void handle(GameSession session, GameAccount account, GuildListRequest packet) throws Exception {
+    protected void handle(GameSession session, GameAccount account, GuildInfoMemberRequest packet) throws Exception {
         GamePlayer player = session.player();
 
         if (player == null) {
@@ -39,11 +38,11 @@ public class GuildList extends AbstractLoggedPacketHandler<GuildListRequest> {
         if (player.getGuild() == null) {
             return;
         }
-        session.send(new GuildInfoGeneralResponse(player.getGuild()));
+        session.send(new GuildInfoMemberResponse(player.getGuild()));
     }
 
     @Override
-    public Class<GuildListRequest> packet() {
-        return GuildListRequest.class;
+    public Class<GuildInfoMemberRequest> packet() {
+        return GuildInfoMemberRequest.class;
     }
 }

@@ -19,25 +19,25 @@
 
 package fr.quatrevieux.araknemu.data.living.entity.social;
 
-public class Guild {
+public class PlayerGuild {
     private final int id;
     private final String name;
-    private final String emblem;
+    private final GuildEmblem emblem;
     private final int level;
     private final int experience;
     private final int capital;
-    private final int perco_max;
+    private final int percoMax;
     private final String spells;
     private final String stats;
 
-    public Guild(int id, String name, String emblem, int level, int experience, int capital, int percoMax, String spells, String stats) {
+    public PlayerGuild(int id, String name, GuildEmblem emblem, int level, int experience, int capital, int percoMax, String spells, String stats) {
         this.id = id;
         this.name = name;
         this.emblem = emblem;
         this.level = level;
         this.experience = experience;
         this.capital = capital;
-        perco_max = percoMax;
+        this.percoMax = percoMax;
         this.spells = spells;
         this.stats = stats;
     }
@@ -50,7 +50,7 @@ public class Guild {
         return name;
     }
 
-    public String getEmblem() {
+    public GuildEmblem getEmblem() {
         return emblem;
     }
 
@@ -66,8 +66,8 @@ public class Guild {
         return capital;
     }
 
-    public int getPerco_max() {
-        return perco_max;
+    public int getPercoMax() {
+        return percoMax;
     }
 
     public String getSpells() {

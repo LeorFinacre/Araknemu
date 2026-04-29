@@ -17,19 +17,25 @@
  * Copyright (c) 2017-2026 Leor Finacre
  */
 
-package fr.quatrevieux.araknemu.network.game.out.social.guild;
+package fr.quatrevieux.araknemu.network.game.in.social.guild;
 
-public class GuildListResponse {
-    private final int playerId;
+import fr.quatrevieux.araknemu.core.network.parser.Packet;
+import fr.quatrevieux.araknemu.core.network.parser.ParsePacketException;
+import fr.quatrevieux.araknemu.core.network.parser.SinglePacketParser;
+import org.checkerframework.common.value.qual.MinLen;
 
-    public GuildListResponse(int playerId) {
-        this.playerId = playerId;
-    }
+public class GuildInfoMemberRequest implements Packet {
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("gIG0|1|0|0|1100");
+    public static final class Parser implements SinglePacketParser<GuildInfoMemberRequest> {
 
-        return sb.toString();
+        @Override
+        public GuildInfoMemberRequest parse(String input) throws ParsePacketException {
+            return new GuildInfoMemberRequest();
+        }
+
+        @Override
+        public @MinLen(2) String code() {
+            return "gIM";
+        }
     }
 }

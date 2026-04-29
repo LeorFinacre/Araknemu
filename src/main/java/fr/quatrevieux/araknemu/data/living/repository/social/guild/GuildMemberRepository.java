@@ -20,10 +20,14 @@
 package fr.quatrevieux.araknemu.data.living.repository.social.guild;
 
 import fr.quatrevieux.araknemu.core.dbal.repository.MutableRepository;
-import fr.quatrevieux.araknemu.data.living.entity.social.Guild;
 import fr.quatrevieux.araknemu.data.living.entity.social.GuildMember;
+import fr.quatrevieux.araknemu.game.social.guild.GameGuildMember;
+
+import java.util.List;
 
 public interface GuildMemberRepository extends MutableRepository<GuildMember> {
 
     public GuildMember getGuildIdByPlayerId(int playerId);
+
+    public List<GuildMember> findByGuild(int guildId);
 }

@@ -24,24 +24,19 @@ import fr.quatrevieux.araknemu.core.dbal.repository.EntityNotFoundException;
 import fr.quatrevieux.araknemu.core.dbal.repository.Record;
 import fr.quatrevieux.araknemu.core.dbal.repository.RepositoryException;
 import fr.quatrevieux.araknemu.core.dbal.repository.RepositoryUtils;
-import fr.quatrevieux.araknemu.data.living.entity.social.Guild;
 import fr.quatrevieux.araknemu.data.living.entity.social.GuildMember;
 import fr.quatrevieux.araknemu.data.living.repository.social.guild.GuildMemberRepository;
-import fr.quatrevieux.araknemu.data.living.repository.social.guild.GuildRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class SqlGuildMemberRepository implements GuildMemberRepository {
     private final QueryExecutor executor;
     private final RepositoryUtils<GuildMember> utils;
-    private final GuildMemberRepository guildMemberRepository;
-    private final GuildRepository guildRepository;
 
-    public SqlGuildMemberRepository(QueryExecutor executor, GuildMemberRepository guildMemberRepository, GuildRepository guildRepository) {
+    public SqlGuildMemberRepository(QueryExecutor executor) {
         this.executor = executor;
-        this.guildMemberRepository = guildMemberRepository;
-        this.guildRepository = guildRepository;
         this.utils = new RepositoryUtils<>(this.executor, new SqlGuildMemberRepository.Loader());
     }
 
@@ -50,10 +45,10 @@ public class SqlGuildMemberRepository implements GuildMemberRepository {
         utils.update(
                 "REPLACE INTO GUILD_MEMBER (`PLAYER_ID`, `GUILD_ID`, `RANK`, `GIVEN_XP`, `RIGHTS`, `ALIGN`) VALUES (?, ?, ?, ?, ?, ?)",
                 rs -> {
-                    rs.setInt(1, entity.getPlayer_id());
-                    rs.setInt(2, entity.getGuild_id());
+                    rs.setInt(1, entity.getPlayerId());
+                    rs.setInt(2, entity.getGuildId());
                     rs.setInt(3, entity.getRank());
-                    rs.setInt(4, entity.getGiven_xp());
+                    rs.setInt(4, entity.getGivenXp());
                     rs.setInt(5, entity.getRights());
                     rs.setInt(6, entity.getAlign());
                 }
@@ -66,8 +61,8 @@ public class SqlGuildMemberRepository implements GuildMemberRepository {
     public void delete(GuildMember entity) throws RepositoryException {
         final int count = utils.update(
                 "DELETE FROM GUILD_MEMBER WHERE PLAYER_ID = ? AND GUILD_ID = ?", rs -> {
-                    rs.setInt(1, entity.getPlayer_id());
-                    rs.setInt(2, entity.getGuild_id());
+                    rs.setInt(1, entity.getPlayerId());
+                    rs.setInt(2, entity.getGuildId());
                 });
 
         if (count != 1) {
@@ -107,8 +102,8 @@ public class SqlGuildMemberRepository implements GuildMemberRepository {
     public GuildMember get(GuildMember entity) throws RepositoryException {
         try {
             return utils.findOne("SELECT * FROM GUILD_MEMBER WHERE PLAYER_ID = ? AND GUILD_ID = ?", rs -> {
-                rs.setInt(1, entity.getPlayer_id());
-                rs.setInt(2, entity.getGuild_id());
+                rs.setInt(1, entity.getPlayerId());
+                rs.setInt(2, entity.getGuildId());
             });
         } catch (EntityNotFoundException e) {
             throw new RepositoryException(e);
@@ -118,7 +113,7 @@ public class SqlGuildMemberRepository implements GuildMemberRepository {
     @Override
     public boolean has(GuildMember entity) throws RepositoryException {
         return utils.aggregate("SELECT COUNT(*) FROM GUILD_MEMBER WHERE GUILD_ID = ?", rs -> {
-            rs.setInt(1, entity.getGuild_id());
+            rs.setInt(1, entity.getGuildId());
         }) > 0;
     }
 
@@ -127,6 +122,17 @@ public class SqlGuildMemberRepository implements GuildMemberRepository {
         try {
             return utils.findOne("SELECT * FROM GUILD_MEMBER WHERE PLAYER_ID = ?", rs -> {
                 rs.setInt(1, playerId);
+            });
+        } catch (EntityNotFoundException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    @Override
+    public List<GuildMember> findByGuild(int guildId) {
+        try {
+            return utils.findAll("SELECT * FROM GUILD_MEMBER WHERE GUILD_ID = ?", rs -> {
+                rs.setInt(1, guildId);
             });
         } catch (EntityNotFoundException e) {
             throw new RepositoryException(e);

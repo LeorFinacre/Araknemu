@@ -17,19 +17,10 @@
  * Copyright (c) 2017-2026 Leor Finacre
  */
 
-package fr.quatrevieux.araknemu.network.game.out.social.guild;
+package fr.quatrevieux.araknemu.data.world.repository.guild;
 
-public class GuildListResponse {
-    private final int playerId;
+import fr.quatrevieux.araknemu.core.dbal.repository.Repository;
+import fr.quatrevieux.araknemu.data.world.entity.guild.GuildExperience;
 
-    public GuildListResponse(int playerId) {
-        this.playerId = playerId;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("gIG0|1|0|0|1100");
-
-        return sb.toString();
-    }
+public interface GuildExperienceRepository extends Repository<GuildExperience> {
 }

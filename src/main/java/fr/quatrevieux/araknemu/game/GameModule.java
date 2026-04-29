@@ -53,6 +53,8 @@ import fr.quatrevieux.araknemu.data.living.repository.player.PlayerItemRepositor
 import fr.quatrevieux.araknemu.data.living.repository.player.PlayerRepository;
 import fr.quatrevieux.araknemu.data.living.repository.player.PlayerSpellRepository;
 import fr.quatrevieux.araknemu.data.living.repository.social.friend.FriendRepository;
+import fr.quatrevieux.araknemu.data.living.repository.social.guild.GuildMemberRepository;
+import fr.quatrevieux.araknemu.data.living.repository.social.guild.GuildRepository;
 import fr.quatrevieux.araknemu.data.world.repository.SpellTemplateRepository;
 import fr.quatrevieux.araknemu.data.world.repository.character.PlayerExperienceRepository;
 import fr.quatrevieux.araknemu.data.world.repository.character.PlayerRaceRepository;
@@ -258,6 +260,8 @@ import fr.quatrevieux.araknemu.game.player.inventory.InventoryService;
 import fr.quatrevieux.araknemu.game.player.race.PlayerRaceService;
 import fr.quatrevieux.araknemu.game.player.spell.SpellBookService;
 import fr.quatrevieux.araknemu.game.social.friend.FriendService;
+import fr.quatrevieux.araknemu.game.social.guild.GuildMemberService;
+import fr.quatrevieux.araknemu.game.social.guild.GuildService;
 import fr.quatrevieux.araknemu.game.spell.SpellService;
 import fr.quatrevieux.araknemu.game.spell.effect.SpellEffectService;
 import fr.quatrevieux.araknemu.network.game.GameExceptionConfigurator;
@@ -320,7 +324,9 @@ public final class GameModule implements ContainerModule {
                     container.get(PlayerExperienceService.class),
 
                     container.get(GameBanIpSynchronizer.class),
-                    container.get(SavingService.class)
+                    container.get(SavingService.class),
+
+                    container.get(GuildService.class)
                 ),
 
                 // Subscribers
@@ -343,7 +349,8 @@ public final class GameModule implements ContainerModule {
                     container.get(AccountService.class),
                     container.get(ShutdownService.class),
                     container.get(GameBanIpSynchronizer.class),
-                    container.get(SavingService.class)
+                    container.get(SavingService.class),
+                    container.get(GuildService.class)
                 )
             )
         );
@@ -455,7 +462,8 @@ public final class GameModule implements ContainerModule {
                 container.get(InventoryService.class),
                 container.get(PlayerRaceService.class),
                 container.get(SpellBookService.class),
-                container.get(PlayerExperienceService.class)
+                container.get(PlayerExperienceService.class),
+                container.get(GuildService.class)
             )
         );
 
@@ -633,6 +641,15 @@ public final class GameModule implements ContainerModule {
                 container.get(PlayerRaceRepository.class),
                 container.get(SpellService.class),
                 container.get(SpellEffectService.class)
+            )
+        );
+
+        configurator.persist(
+            GuildService.class,
+            container -> new GuildService(
+                container.get(GuildRepository.class),
+                container.get(GuildMemberRepository.class),
+                container.get(PlayerRepository.class)
             )
         );
 
@@ -1157,6 +1174,13 @@ public final class GameModule implements ContainerModule {
                 FriendService.class,
                 container -> new FriendService(
                         container.get(FriendRepository.class)
+                )
+        );
+
+        configurator.persist(
+                GuildMemberService.class,
+                container -> new GuildMemberService(
+                        container.get(GuildMemberRepository.class)
                 )
         );
     }
